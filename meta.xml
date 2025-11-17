@@ -1,6 +1,10 @@
 <meta>
     <oop>true</oop>
+<<<<<<< HEAD
     <info author="foxxnyep" name="NMT" version="1.0.23" type="misc"/>
+=======
+    <info author="foxxnyep" name="NMT" version="1.0.22" type="misc"/>
+>>>>>>> afd8c8aa8b5993144f390dc9aa5ea848cf5828d5
     
     <!-- Utility scripts (shared) -->
     <script type="server" src="utils/rotation.lua" />
