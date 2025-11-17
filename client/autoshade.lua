@@ -1,6 +1,10 @@
 -- AutoShade functionality for NMT
 
-local autoShadeElementList = {}
+-- Initialize global list before it's accessed by GUI
+if not _G.autoShadeElementList then
+    _G.autoShadeElementList = {}
+end
+local autoShadeElementList = _G.autoShadeElementList
 
 -- AutoShade function
 function NMT.applyAutoShade()
@@ -52,6 +56,3 @@ addEventHandler("nmt:sendAutoShadeData", root, function(elements)
     local index = #autoShadeElementList + 1
     autoShadeElementList[index] = elements
 end)
-
--- Export for use in other modules
-_G.autoShadeElementList = autoShadeElementList
