@@ -5,7 +5,7 @@ local AUTO_UPDATE_ENABLED = false -- Disabled due to nested directory issues wit
 local AUTO_UPDATE_INTERVAL = 3600000 -- Check every hour (in milliseconds)
 -- Raw GitHub URL for the repository where updates are hosted. (Updated to the provided repo)
 local GITHUB_REPO_URL = "https://raw.githubusercontent.com/nyepnyep/nyepping-tool/main/"
-local NMT_VERSION = "1.0.10"
+local NMT_VERSION = "1.0.11"
 
 -- Helper function to compare versions
 local function compareVersions(v1, v2)
@@ -115,10 +115,11 @@ function downloadUpdate()
         addFile("meta.xml")
 
         -- Parse <script src="..."> and <file src="..."> entries in meta.xml
-        for src in metaData:gmatch('<script%s+src="([^"]+)"') do
+        -- Pattern handles src attribute anywhere in the tag (before or after type, cache, etc.)
+        for src in metaData:gmatch('<script[^>]+src="([^"]+)"') do
             addFile(src)
         end
-        for src in metaData:gmatch('<file%s+src="([^"]+)"') do
+        for src in metaData:gmatch('<file[^>]+src="([^"]+)"') do
             addFile(src)
         end
 
