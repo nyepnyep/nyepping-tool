@@ -219,3 +219,5 @@ addEventHandler("nmt:autoShade", root, function(element, sides, elemid)
     triggerClientEvent(source, "nmt:sendAutoShadeData", source, createdElements)
     outputChatBox("NMT: Created " .. createdCount .. " shade object" .. (createdCount == 1 and "" or "s"), source, 0, 255, 0)
 end)
+
+outputChatBox ("NMT: 1.0.3 test.", root, 0, 255, 0)
