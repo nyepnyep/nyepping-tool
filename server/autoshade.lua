@@ -17,7 +17,7 @@ addEventHandler("nmt:autoShade", root, function(element, sides, elemid)
     local createdElements = {}
     
     -- Left
-    if sides["bal"] then
+    if sides["asLeft"] then
         local shade = exports.edf:edfCloneElement(element)
         local elementMatrix = element.matrix
         local viktorVektor = Vector3(0, 1.0427426099777, -1.0366859436)
@@ -36,7 +36,7 @@ addEventHandler("nmt:autoShade", root, function(element, sides, elemid)
     end
     
     -- Right
-    if sides["jobb"] then
+    if sides["asRight"] then
         local shade = exports.edf:edfCloneElement(element)
         local elementMatrix = element.matrix
         local viktorVektor = Vector3(0, -1.0276000499725, -1.042857170105)
@@ -55,7 +55,7 @@ addEventHandler("nmt:autoShade", root, function(element, sides, elemid)
     end
     
     -- Bottom
-    if sides["alul"] then
+    if sides["asBottom"] then
         local shade = exports.edf:edfCloneElement(element)
         local elementMatrix = element.matrix
         local viktorVektor = Vector3(0, 0.009341829456389, -2.0765142440796)
@@ -69,84 +69,6 @@ addEventHandler("nmt:autoShade", root, function(element, sides, elemid)
         shadeCount = shadeCount + 1
         exports.edf:edfSetElementProperty(shade, "id", "NMT: Shade (" .. shadeCount .. ")")
         setElementID(shade, "NMT: Shade (" .. shadeCount .. ")")
-        createdCount = createdCount + 1
-        table.insert(createdElements, shade)
-    end
-    
-    -- Back (Shade)
-    if sides["hatul"] then
-        local shade = exports.edf:edfCloneElement(element)
-        local elementMatrix = element.matrix
-        local viktorVektor = Vector3(-18.671627044678, 0.0048828125, -18.67325592041)
-        local positionVector = elementMatrix.transformPosition(elementMatrix, viktorVektor)
-        local shadeX, shadeY, shadeZ = positionVector.x, positionVector.y, positionVector.z
-        local shadeRX, shadeRY, shadeRZ = getElementRotation(element)
-        shadeRX, shadeRY, shadeRZ = rotateY(shadeRX, shadeRY, shadeRZ, 270)
-        exports.edf:edfSetElementProperty(shade, "model", elemid)
-        exports.edf:edfSetElementPosition(shade, shadeX, shadeY, shadeZ)
-        exports.edf:edfSetElementRotation(shade, shadeRX, shadeRY, shadeRZ)
-        shadeCount = shadeCount + 1
-        exports.edf:edfSetElementProperty(shade, "id", "NMT: Shade (" .. shadeCount .. ")")
-        setElementID(shade, "NMT: Shade (" .. shadeCount .. ")")
-        createdCount = createdCount + 1
-        table.insert(createdElements, shade)
-    end
-    
-    -- Front (Shade)
-    if sides["elol"] then
-        local shade = exports.edf:edfCloneElement(element)
-        local elementMatrix = element.matrix
-        local viktorVektor = Vector3(18.673532485962, 0.0049999998882413, -18.67325592041)
-        local positionVector = elementMatrix.transformPosition(elementMatrix, viktorVektor)
-        local shadeX, shadeY, shadeZ = positionVector.x, positionVector.y, positionVector.z
-        local shadeRX, shadeRY, shadeRZ = getElementRotation(element)
-        shadeRX, shadeRY, shadeRZ = rotateY(shadeRX, shadeRY, shadeRZ, 90)
-        exports.edf:edfSetElementProperty(shade, "model", elemid)
-        exports.edf:edfSetElementPosition(shade, shadeX, shadeY, shadeZ)
-        exports.edf:edfSetElementRotation(shade, shadeRX, shadeRY, shadeRZ)
-        shadeCount = shadeCount + 1
-        exports.edf:edfSetElementProperty(shade, "id", "NMT: Shade (" .. shadeCount .. ")")
-        setElementID(shade, "NMT: Shade (" .. shadeCount .. ")")
-        createdCount = createdCount + 1
-        table.insert(createdElements, shade)
-    end
-    
-    -- Front (Tower)
-    if sides["box_elol"] then
-        local shade = exports.edf:edfCloneElement(element)
-        local elementMatrix = element.matrix
-        local viktorVektor = Vector3(20.214780807495, 0, -1.0640610456467)
-        local positionVector = elementMatrix.transformPosition(elementMatrix, viktorVektor)
-        local shadeX, shadeY, shadeZ = positionVector.x, positionVector.y, positionVector.z
-        local shadeRX, shadeRY, shadeRZ = getElementRotation(element)
-        exports.edf:edfSetElementProperty(shade, "model", 16327)
-        exports.edf:edfSetElementPosition(shade, shadeX, shadeY, shadeZ)
-        exports.edf:edfSetElementRotation(shade, shadeRX, shadeRY+270, shadeRZ)
-        shadeCount = shadeCount + 1
-        exports.edf:edfSetElementProperty(shade, "id", "NMT: Tower [Tower] (" .. shadeCount .. ")")
-        exports.edf:edfSetElementProperty(shade, "scale", 1.01722812)
-        exports.edf:edfSetElementProperty(shade, "doublesided", "true")
-        setElementID(shade, "NMT: Tower [Tower] (" .. shadeCount .. ")")
-        createdCount = createdCount + 1
-        table.insert(createdElements, shade)
-    end
-    
-    -- Back (Tower)
-    if sides["box_hatul"] then
-        local shade = exports.edf:edfCloneElement(element)
-        local elementMatrix = element.matrix
-        local viktorVektor = Vector3(-20.214780807495, 0, -1.0640610456467)
-        local positionVector = elementMatrix.transformPosition(elementMatrix, viktorVektor)
-        local shadeX, shadeY, shadeZ = positionVector.x, positionVector.y, positionVector.z
-        local shadeRX, shadeRY, shadeRZ = getElementRotation(element)
-        exports.edf:edfSetElementProperty(shade, "model", 16327)
-        exports.edf:edfSetElementPosition(shade, shadeX, shadeY, shadeZ)
-        exports.edf:edfSetElementRotation(shade, shadeRX, shadeRY+90, shadeRZ)
-        shadeCount = shadeCount + 1
-        exports.edf:edfSetElementProperty(shade, "id", "NMT: Tower [Tower] (" .. shadeCount .. ")")
-        exports.edf:edfSetElementProperty(shade, "scale", 1.01722812)
-        exports.edf:edfSetElementProperty(shade, "doublesided", "true")
-        setElementID(shade, "NMT: Tower [Tower] (" .. shadeCount .. ")")
         createdCount = createdCount + 1
         table.insert(createdElements, shade)
     end
@@ -199,7 +121,7 @@ addEventHandler("nmt:autoShade", root, function(element, sides, elemid)
     end
     
     -- Front (using table config)
-    if sides["front"] then
+    if sides["asFront"] then
         local shadeCountRef = {shadeCount}
         local shade = createShadeFromConfig(element, sides["front"], elemid, "Front", shadeCountRef)
         shadeCount = shadeCountRef[1]
@@ -208,7 +130,7 @@ addEventHandler("nmt:autoShade", root, function(element, sides, elemid)
     end
     
     -- Back (using table config)
-    if sides["back"] then
+    if sides["asBack"] then
         local shadeCountRef = {shadeCount}
         local shade = createShadeFromConfig(element, sides["back"], elemid, "Back", shadeCountRef)
         shadeCount = shadeCountRef[1]

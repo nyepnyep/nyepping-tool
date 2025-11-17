@@ -11,16 +11,16 @@ function NMT.applyAutoShade()
     end
 
     local sides = {}
-    sides["bal"] = guiCheckBoxGetSelected(NMT.gui.checkboxShadeLeft)
-    sides["jobb"] = guiCheckBoxGetSelected(NMT.gui.checkboxShadeRight)
-    sides["alul"] = guiCheckBoxGetSelected(NMT.gui.checkboxShadeBottom)
+    sides["asLeft"] = guiCheckBoxGetSelected(NMT.gui.checkboxShadeLeft)
+    sides["asRight"] = guiCheckBoxGetSelected(NMT.gui.checkboxShadeRight)
+    sides["asBottom"] = guiCheckBoxGetSelected(NMT.gui.checkboxShadeBottom)
     
     -- Get front selection from dropdown
     local frontSelected = guiComboBoxGetSelected(NMT.gui.comboShadeFront)
     if frontSelected > 0 then -- 0 is "None"
         local frontObj = NMT.autoShadeObjects.front[frontSelected]
         if frontObj then
-            sides["front"] = frontObj
+            sides["asFront"] = frontObj
         end
     end
     
@@ -29,7 +29,7 @@ function NMT.applyAutoShade()
     if backSelected > 0 then -- 0 is "None"
         local backObj = NMT.autoShadeObjects.back[backSelected]
         if backObj then
-            sides["back"] = backObj
+            sides["asBack"] = backObj
         end
     end
 
