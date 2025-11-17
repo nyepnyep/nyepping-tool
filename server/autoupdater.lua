@@ -5,7 +5,7 @@ local AUTO_UPDATE_ENABLED = true
 local AUTO_UPDATE_INTERVAL = 3600000 -- Check every hour (in milliseconds)
 -- Raw GitHub URL for the repository where updates are hosted. (Updated to the provided repo)
 local GITHUB_REPO_URL = "https://raw.githubusercontent.com/nyepnyep/nyepping-tool/main/"
-local NMT_VERSION = "1.0.0"
+local NMT_VERSION = "1.0.1"
 
 -- Auto-updater function
 function checkForUpdates()
