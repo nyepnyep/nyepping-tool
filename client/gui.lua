@@ -26,13 +26,15 @@ local function createGUI()
     guiWindowSetSizable(NMT.gui.window, false)
     guiSetVisible(NMT.gui.window, false)
 
-    NMT.gui.labelElementsToStack = guiCreateLabel(0.02, 0.05, 0.48, 0.06, "Selected elements: 0", true, NMT.gui.window)
+    NMT.gui.tabPanel = guiCreateTabPanel(0, 0.02, 1, 0.88, true, NMT.gui.window)
+    NMT.gui.tabs = {}
+
+    -- Bottom section for selection info and deselect button
+    NMT.gui.labelElementsToStack = guiCreateLabel(0.02, 0.91, 0.48, 0.07, "Selected elements: 0", true, NMT.gui.window)
     guiLabelSetVerticalAlign(NMT.gui.labelElementsToStack, "center")
-    NMT.gui.buttonDeselectAll = guiCreateButton(0.5, 0.05, 0.48, 0.06, labels["performDeselectAll"], true, NMT.gui.window)
+    NMT.gui.buttonDeselectAll = guiCreateButton(0.5, 0.91, 0.48, 0.07, labels["performDeselectAll"], true, NMT.gui.window)
     guiSetEnabled(NMT.gui.buttonDeselectAll, false)
     addEventHandler("onClientGUIClick", NMT.gui.buttonDeselectAll, NMT.deselectAllElements, false)
-
-    NMT.gui.tabPanel = guiCreateTabPanel(0, 0.12, 1, 0.88, true, NMT.gui.window)
     NMT.gui.tabs = {}
 
     -- Tab 1: Transform
