@@ -5,7 +5,7 @@ local AUTO_UPDATE_ENABLED = false -- Disabled due to nested directory issues wit
 local AUTO_UPDATE_INTERVAL = 3600000 -- Check every hour (in milliseconds)
 -- Raw GitHub URL for the repository where updates are hosted. (Updated to the provided repo)
 local GITHUB_REPO_URL = "https://raw.githubusercontent.com/nyepnyep/nyepping-tool/main/"
-local NMT_VERSION = "1.0.12"
+local NMT_VERSION = "1.0.13"
 
 -- Helper function to compare versions
 local function compareVersions(v1, v2)
@@ -42,8 +42,9 @@ function checkForUpdates(forceCheck)
     
     outputDebugString("[NMT] Checking for updates...")
     
-    -- Fetch the latest meta.xml to check version
-    fetchRemote(GITHUB_REPO_URL .. "meta.xml", function(responseData, errno)
+    -- Fetch the latest meta.xml to check version (with cache buster to avoid stale data)
+    local cacheBuster = "?t=" .. tostring(getRealTime().timestamp)
+    fetchRemote(GITHUB_REPO_URL .. "meta.xml" .. cacheBuster, function(responseData, errno)
         if errno == 0 and responseData then
             -- Parse version from meta.xml
             local latestVersion = responseData:match('version="([^"]+)"')
@@ -85,9 +86,13 @@ end
 function downloadUpdate()
     -- Dynamic downloader: fetch meta.xml from the repo, parse file entries, then download each file.
     outputDebugString("[NMT] [DEBUG] Starting downloadUpdate()")
-    outputDebugString("[NMT] [DEBUG] Fetching meta.xml from: " .. GITHUB_REPO_URL .. "meta.xml")
     
-    fetchRemote(GITHUB_REPO_URL .. "meta.xml", function(metaData, metaErr)
+    -- Add cache buster to prevent stale cached responses
+    local cacheBuster = "?t=" .. tostring(getRealTime().timestamp)
+    local metaURL = GITHUB_REPO_URL .. "meta.xml" .. cacheBuster
+    outputDebugString("[NMT] [DEBUG] Fetching meta.xml from: " .. metaURL)
+    
+    fetchRemote(metaURL, function(metaData, metaErr)
         if not (metaErr == 0 and metaData) then
             outputDebugString("[NMT] Failed to fetch meta.xml for dynamic update: " .. tostring(metaErr))
             outputChatBox("[NMT] Update failed: Could not fetch meta.xml (error: " .. tostring(metaErr) .. ")", root, 255, 0, 0)
@@ -140,7 +145,9 @@ function downloadUpdate()
         local failCount = 0
 
         for _, fileName in ipairs(filesList) do
-            local downloadURL = GITHUB_REPO_URL .. fileName
+            -- Add cache buster to each file download to prevent stale data
+            local fileCacheBuster = "?t=" .. tostring(getRealTime().timestamp)
+            local downloadURL = GITHUB_REPO_URL .. fileName .. fileCacheBuster
             outputDebugString("[NMT] [DEBUG] Downloading: " .. downloadURL)
             
             fetchRemote(downloadURL, function(responseData, errno)
