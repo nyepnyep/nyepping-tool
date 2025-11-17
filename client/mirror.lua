@@ -42,6 +42,24 @@ function NMT.setMirrorMainElement(element)
     return true
 end
 
+function NMT.getMirrorDirection()
+    local selected = guiComboBoxGetSelected(NMT.gui.comboMirrorDirection)
+    if selected == -1 then
+        return nil
+    end
+    
+    local directions = {
+        [0] = {axis = "x", factor = 1},   -- X+ (Right)
+        [1] = {axis = "x", factor = -1},  -- X- (Left)
+        [2] = {axis = "y", factor = 1},   -- Y+ (Forward)
+        [3] = {axis = "y", factor = -1},  -- Y- (Backward)
+        [4] = {axis = "z", factor = 1},   -- Z+ (Up)
+        [5] = {axis = "z", factor = -1}   -- Z- (Down)
+    }
+    
+    return directions[selected]
+end
+
 -- Rotation conversion functions (from AutoShade/AMT)
 function convertRotationToMTA(rx, ry, rz)
     rx, ry, rz = math.rad(rx), math.rad(ry), math.rad(rz)
@@ -134,6 +152,105 @@ function NMT.clearMirrorPreview()
         end
     end
     mirrorPreviewElements = {}
+end
+
+function NMT.updateMirrorPreview()
+    NMT.clearMirrorPreview()
+    NMT.previewMirror()
+end
+
+function NMT.previewMirror()
+    NMT.clearMirrorPreview()
+    
+    if not NMT.mirrorMainElement or not isElement(NMT.mirrorMainElement) then
+        outputChatBox("NMT: Please select a main element first", 255, 0, 0)
+        return
+    end
+    
+    if not NMT.selectedElements or NMT.countSelectedElements() == 0 then
+        outputChatBox("NMT: Please select elements to mirror using Q key", 255, 0, 0)
+        return
+    end
+    
+    local direction = NMT.getMirrorDirection()
+    if not direction then
+        outputChatBox("NMT: Please select a mirror direction", 255, 0, 0)
+        return
+    end
+    
+    local mainX, mainY, mainZ = getElementPosition(NMT.mirrorMainElement)
+    local mainPos = {x = mainX, y = mainY, z = mainZ}
+    local dimension = getElementDimension(localPlayer)
+    
+    for element in pairs(NMT.selectedElements) do
+        if isElement(element) then
+            local model = getElementModel(element)
+            local x, y, z = getElementPosition(element)
+            local rx, ry, rz = getElementRotation(element)
+            
+            local mirroredPos = NMT.calculateMirroredPosition({x = x, y = y, z = z}, mainPos, direction)
+            local mirroredRot = NMT.calculateMirroredRotation({x = rx, y = ry, z = rz}, direction)
+            
+            local previewElement = createObject(model, mirroredPos.x, mirroredPos.y, mirroredPos.z, 
+                                               mirroredRot.x, mirroredRot.y, mirroredRot.z)
+            if previewElement then
+                setElementDimension(previewElement, dimension)
+                setElementAlpha(previewElement, 150)
+                table.insert(mirrorPreviewElements, previewElement)
+            end
+        end
+    end
+    
+    outputChatBox(string.format("NMT: Previewing %d mirrored elements", #mirrorPreviewElements), 0, 255, 0)
+end
+
+function NMT.generateMirror()
+    if not NMT.mirrorMainElement or not isElement(NMT.mirrorMainElement) then
+        outputChatBox("NMT: Please select a main element first", 255, 0, 0)
+        return
+    end
+    
+    if not NMT.selectedElements or NMT.countSelectedElements() == 0 then
+        outputChatBox("NMT: Please select elements to mirror using Q key", 255, 0, 0)
+        return
+    end
+    
+    local direction = NMT.getMirrorDirection()
+    if not direction then
+        outputChatBox("NMT: Please select a mirror direction", 255, 0, 0)
+        return
+    end
+    
+    local mainX, mainY, mainZ = getElementPosition(NMT.mirrorMainElement)
+    local mainPos = {x = mainX, y = mainY, z = mainZ}
+    
+    local elementsData = {}
+    for element in pairs(NMT.selectedElements) do
+        if isElement(element) then
+            local model = getElementModel(element)
+            local x, y, z = getElementPosition(element)
+            local rx, ry, rz = getElementRotation(element)
+            local scale = getObjectScale(element)
+            
+            local mirroredPos = NMT.calculateMirroredPosition({x = x, y = y, z = z}, mainPos, direction)
+            local mirroredRot = NMT.calculateMirroredRotation({x = rx, y = ry, z = rz}, direction)
+            
+            table.insert(elementsData, {
+                source = element,           -- pass original element for EDF cloning on server
+                model = model,
+                x = mirroredPos.x,
+                y = mirroredPos.y,
+                z = mirroredPos.z,
+                rx = mirroredRot.x,
+                ry = mirroredRot.y,
+                rz = mirroredRot.z,
+                scale = scale
+            })
+        end
+    end
+    
+    NMT.clearMirrorPreview()
+    triggerServerEvent("nmt:mirrorGenerate", localPlayer, elementsData)
 end
 
 addEvent("nmt:mirrorGenerated", true)

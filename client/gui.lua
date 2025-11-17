@@ -277,8 +277,69 @@ local function createGUI()
         table.remove(autoShadeElementList, index)
         outputChatBox("NMT: Undone last AutoShade application", 0, 255, 0)
     end, false)
+
+    -- Tab 5: Mirror
+    NMT.gui.tabs[5] = guiCreateTab("Mirror", NMT.gui.tabPanel)
+
+    -- Main element selection
+    NMT.gui.labelMirrorMainElement = guiCreateLabel(0.02, 0.05, 0.48, 0.06, "Main element: not selected", true, NMT.gui.tabs[5])
+    guiLabelSetVerticalAlign(NMT.gui.labelMirrorMainElement, "center")
+    NMT.gui.buttonSelectMirrorMainElement = guiCreateButton(0.52, 0.05, 0.46, 0.06, "Select main element", true, NMT.gui.tabs[5])
+    addEventHandler("onClientGUIClick", NMT.gui.buttonSelectMirrorMainElement, function()
+        if NMT.mirrorMainElement and isElement(NMT.mirrorMainElement) then
+            NMT.setMirrorMainElement(0)
+            return
+        end
+
+        NMT.processingMirrorMainElementSelect = true
+        guiSetText(NMT.gui.buttonSelectMirrorMainElement, "Select an element...")
+    end, false)
+
+    -- Info text
+    NMT.gui.labelMirrorInfo = guiCreateLabel(0.02, 0.13, 0.96, 0.10, "1. Select main element\n2. Use Q to select objects to mirror\n3. Choose direction and preview", true, NMT.gui.tabs[5])
+    guiLabelSetHorizontalAlign(NMT.gui.labelMirrorInfo, "center")
+    guiLabelSetVerticalAlign(NMT.gui.labelMirrorInfo, "center")
+
+    -- Direction selection
+    NMT.gui.labelMirrorDirection = guiCreateLabel(0.02, 0.25, 0.3, 0.06, "Mirror direction:", true, NMT.gui.tabs[5])
+    guiLabelSetVerticalAlign(NMT.gui.labelMirrorDirection, "center")
+    
+    NMT.gui.comboMirrorDirection = guiCreateComboBox(0.35, 0.25, 0.63, 0.30, "Select direction", true, NMT.gui.tabs[5])
+    guiComboBoxAddItem(NMT.gui.comboMirrorDirection, "X+ (Right)")
+    guiComboBoxAddItem(NMT.gui.comboMirrorDirection, "X- (Left)")
+    guiComboBoxAddItem(NMT.gui.comboMirrorDirection, "Y+ (Forward)")
+    guiComboBoxAddItem(NMT.gui.comboMirrorDirection, "Y- (Backward)")
+    guiComboBoxAddItem(NMT.gui.comboMirrorDirection, "Z+ (Up)")
+    guiComboBoxAddItem(NMT.gui.comboMirrorDirection, "Z- (Down)")
+    addEventHandler("onClientGUIComboBoxAccepted", NMT.gui.comboMirrorDirection, function()
+        NMT.updateMirrorPreview()
+    end, false)
+
+    -- Buttons
+    NMT.gui.buttonMirrorPreview = guiCreateButton(0.02, 0.63, 0.47, 0.1, "Preview", true, NMT.gui.tabs[5])
+    addEventHandler("onClientGUIClick", NMT.gui.buttonMirrorPreview, NMT.previewMirror, false)
+
+    NMT.gui.buttonMirrorClear = guiCreateButton(0.51, 0.63, 0.47, 0.1, "Clear preview", true, NMT.gui.tabs[5])
+    addEventHandler("onClientGUIClick", NMT.gui.buttonMirrorClear, NMT.clearMirrorPreview, false)
+
+    NMT.gui.buttonMirrorGenerate = guiCreateButton(0.02, 0.74, 0.96, 0.1, "Generate", true, NMT.gui.tabs[5])
+    addEventHandler("onClientGUIClick", NMT.gui.buttonMirrorGenerate, NMT.generateMirror, false)
+
+    NMT.gui.buttonMirrorUndo = guiCreateButton(0.02, 0.85, 0.96, 0.1, "Undo last", true, NMT.gui.tabs[5])
+    addEventHandler("onClientGUIClick", NMT.gui.buttonMirrorUndo, function()
+        local mirrorElementList = _G.mirrorElementList or {}
+        local index = #mirrorElementList
+        if index == 0 then
+            outputChatBox("NMT: Nothing to undo", 255, 0, 0)
+            return
+        end
+        triggerServerEvent("nmt:destroyElements", localPlayer, mirrorElementList[index])
+        table.remove(mirrorElementList, index)
+        outputChatBox("NMT: Undone last Mirror generation", 0, 255, 0)
+    end, false)
+
     -- Mirror+ tab (Multi-axis mirroring)
-    NMT.gui.tabs[5] = guiCreateTab("Mirror+", NMT.gui.tabPanel)
+    NMT.gui.tabs[6] = guiCreateTab("Mirror+", NMT.gui.tabPanel)
 
     -- Main element selection
     NMT.gui.labelMirrorPlusMainElement = guiCreateLabel(0.02, 0.05, 0.48, 0.06, "Main element: not selected", true, NMT.gui.tabs[6])
