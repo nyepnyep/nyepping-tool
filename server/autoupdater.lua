@@ -5,11 +5,7 @@ local AUTO_UPDATE_ENABLED = false -- Disabled due to nested directory issues wit
 local AUTO_UPDATE_INTERVAL = 3600000 -- Check every hour (in milliseconds)
 -- Raw GitHub URL for the repository where updates are hosted. (Updated to the provided repo)
 local GITHUB_REPO_URL = "https://raw.githubusercontent.com/nyepnyep/nyepping-tool/main/"
-local NMT_VERSION = "1.0.6"
-
-setTimer(function()
-    outputChatBox ("Current NMT Version: " .. NMT_VERSION)
-)
+local NMT_VERSION = "1.0.7"
 
 -- Helper function to compare versions
 local function compareVersions(v1, v2)
@@ -39,8 +35,8 @@ local function compareVersions(v1, v2)
 end
 
 -- Auto-updater function
-function checkForUpdates()
-    if not AUTO_UPDATE_ENABLED then
+function checkForUpdates(forceCheck)
+    if not AUTO_UPDATE_ENABLED and not forceCheck then
         return
     end
     
@@ -183,6 +179,8 @@ end
 
 -- Start auto-updater timer on resource start
 addEventHandler("onResourceStart", resourceRoot, function()
+    outputChatBox("[NMT] Current version: " .. NMT_VERSION, root, 100, 200, 255)
+    
     if AUTO_UPDATE_ENABLED then
         outputDebugString("[NMT] Auto-updater enabled. Checking every " .. (AUTO_UPDATE_INTERVAL / 60000) .. " minutes")
         setTimer(checkForUpdates, AUTO_UPDATE_INTERVAL, 0)
@@ -194,8 +192,9 @@ end)
 -- Manual update command
 addCommandHandler("nmtupdate", function(player)
     if hasObjectPermissionTo(player, "function.kickPlayer", false) then
+        outputChatBox("[NMT] Current version: " .. NMT_VERSION, player, 100, 200, 255)
         outputChatBox("[NMT] Manually checking for updates...", player, 255, 165, 0)
-        checkForUpdates()
+        checkForUpdates(true) -- Pass true to force check even when auto-update is disabled
     else
         outputChatBox("[NMT] You don't have permission to use this command", player, 255, 0, 0)
     end
