@@ -38,7 +38,7 @@ local function createGUI()
     NMT.gui.tabs = {}
 
     -- Tab 1: Transform
-    NMT.gui.tabs[1] = guiCreateTab("Transform", NMT.gui.tabPanel)
+    NMT.gui.tabs[1] = guiCreateTab("F3+", NMT.gui.tabPanel)
 
     -- Position inputs
     NMT.gui.labelMoveX = guiCreateLabel(0.02, 0.02, 0.3, 0.08, "position (x):", true, NMT.gui.tabs[1])
@@ -118,7 +118,7 @@ local function createGUI()
     addEventHandler("onClientGUIClick", NMT.gui.buttonClone, NMT.clone, false)
 
     -- Tab 2: Continuous duplication
-    NMT.gui.tabs[2] = guiCreateTab("Continuous duplication", NMT.gui.tabPanel)
+    NMT.gui.tabs[2] = guiCreateTab("Duplicate", NMT.gui.tabPanel)
 
     -- Position inputs
     NMT.gui.labelAddMoveX = guiCreateLabel(0.02, 0.02, 0.3, 0.08, "position (x):", true, NMT.gui.tabs[2])
