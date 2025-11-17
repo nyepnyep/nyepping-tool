@@ -5,7 +5,9 @@ local AUTO_UPDATE_ENABLED = false -- Disabled due to nested directory issues wit
 local AUTO_UPDATE_INTERVAL = 3600000 -- Check every hour (in milliseconds)
 -- Raw GitHub URL for the repository where updates are hosted. (Updated to the provided repo)
 local GITHUB_REPO_URL = "https://raw.githubusercontent.com/nyepnyep/nyepping-tool/main/"
-local NMT_VERSION = "1.0.19"
+local NMT_VERSION = "1.0.20"
+
+outputChatBox ("c")
 
 -- Helper function to compare versions
 local function compareVersions(v1, v2)
