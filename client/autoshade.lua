@@ -1,11 +1,5 @@
 -- AutoShade functionality for NMT
 
--- Initialize global list before it's accessed by GUI
-if not _G.autoShadeElementList then
-    _G.autoShadeElementList = {}
-end
-local autoShadeElementList = _G.autoShadeElementList
-
 -- AutoShade function
 function NMT.applyAutoShade()
     -- Check if there are any selected elements
@@ -42,17 +36,13 @@ function NMT.applyAutoShade()
         elemid = 8558
     end
 
+    outputDebugString("[NMT] Applying AutoShade to selected elements")
+    
     -- Apply AutoShade to all selected elements
     for element in pairs(NMT.selectedElements) do
         if isElement(element) and getElementType(element) == "object" then
+            outputDebugString("[NMT] Triggering server event for element: " .. tostring(element))
             triggerServerEvent("nmt:autoShade", resourceRoot, element, sides, elemid)
         end
     end
 end
-
--- Receive autoshade data from server
-addEvent("nmt:sendAutoShadeData", true)
-addEventHandler("nmt:sendAutoShadeData", root, function(elements)
-    local index = #autoShadeElementList + 1
-    autoShadeElementList[index] = elements
-end)

@@ -1,5 +1,7 @@
 -- Settings functionality for NMT
 
+outputDebugString("[NMT] Loading settings.lua")
+
 -- Settings functions
 function NMT.applySettings()
     -- Get new key binds
@@ -68,3 +70,5 @@ function NMT.resetSettings()
     
     outputChatBox("NMT: Settings reset to defaults", 0, 255, 0)
 end
+
+outputDebugString("[NMT] Settings functions defined: applySettings=" .. tostring(NMT.applySettings) .. ", resetSettings=" .. tostring(NMT.resetSettings))

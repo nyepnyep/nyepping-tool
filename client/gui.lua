@@ -267,17 +267,7 @@ local function createGUI()
     -- Undo button
     NMT.gui.buttonAutoShadeUndo = guiCreateButton(0.02, 0.85, 0.96, 0.1, "Undo last", true, NMT.gui.tabs[4])
     addEventHandler("onClientGUIClick", NMT.gui.buttonAutoShadeUndo, function()
-        if not _G.autoShadeElementList then
-            _G.autoShadeElementList = {}
-        end
-        local index = #_G.autoShadeElementList
-        if index == 0 then
-            outputChatBox("NMT: Nothing to undo", 255, 0, 0)
-            return
-        end
-        triggerServerEvent("nmt:destroyElements", localPlayer, _G.autoShadeElementList[index])
-        table.remove(_G.autoShadeElementList, index)
-        outputChatBox("NMT: Undone last AutoShade application", 0, 255, 0)
+        triggerServerEvent("nmt:autoShadeUndo", localPlayer)
     end, false)
 
     -- Mirror+ tab (Multi-axis mirroring)
