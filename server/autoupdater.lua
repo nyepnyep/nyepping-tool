@@ -5,7 +5,7 @@ local AUTO_UPDATE_ENABLED = false -- Disabled due to nested directory issues wit
 local AUTO_UPDATE_INTERVAL = 3600000 -- Check every hour (in milliseconds)
 -- Raw GitHub URL for the repository where updates are hosted. (Updated to the provided repo)
 local GITHUB_REPO_URL = "https://raw.githubusercontent.com/nyepnyep/nyepping-tool/main/"
-local NMT_VERSION = "1.0.9"
+local NMT_VERSION = "1.0.10"
 
 -- Helper function to compare versions
 local function compareVersions(v1, v2)
@@ -142,7 +142,6 @@ function downloadUpdate()
             local downloadURL = GITHUB_REPO_URL .. fileName
             outputDebugString("[NMT] [DEBUG] Downloading: " .. downloadURL)
             
-            fetchRemote(downloadURL, function(responseData, errno)
             fetchRemote(downloadURL, function(responseData, errno)
                 updateCount = updateCount + 1
                 
