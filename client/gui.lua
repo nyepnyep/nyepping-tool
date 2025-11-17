@@ -46,20 +46,19 @@ local function createGUI()
     -- Position section header
     NMT.gui.labelPositionHeader = guiCreateLabel(0.02, 0.01, 0.96, 0.05, "Position", true, NMT.gui.tabs[1])
     guiSetFont(NMT.gui.labelPositionHeader, "default-bold-small")
-    guiLabelSetHorizontalAlign(NMT.gui.labelPositionHeader, "center")
 
     -- Position inputs
-    NMT.gui.labelMoveX = guiCreateLabel(0.02, 0.07, 0.3, 0.06, "X:", true, NMT.gui.tabs[1])
+    NMT.gui.labelMoveX = guiCreateLabel(0.02, 0.07, 0.3, 0.06, "X", true, NMT.gui.tabs[1])
     guiLabelSetVerticalAlign(NMT.gui.labelMoveX, "center")
     NMT.gui.editMoveX = guiCreateEdit(0.02, 0.13, 0.3, 0.07, "0", true, NMT.gui.tabs[1])
     addEventHandler("onClientGUIChanged", NMT.gui.editMoveX, NMT.moveXYZ, false)
 
-    NMT.gui.labelMoveY = guiCreateLabel(0.35, 0.07, 0.3, 0.06, "Y:", true, NMT.gui.tabs[1])
+    NMT.gui.labelMoveY = guiCreateLabel(0.35, 0.07, 0.3, 0.06, "Y", true, NMT.gui.tabs[1])
     guiLabelSetVerticalAlign(NMT.gui.labelMoveY, "center")
     NMT.gui.editMoveY = guiCreateEdit(0.35, 0.13, 0.3, 0.07, "0", true, NMT.gui.tabs[1])
     addEventHandler("onClientGUIChanged", NMT.gui.editMoveY, NMT.moveXYZ, false)
 
-    NMT.gui.labelMoveZ = guiCreateLabel(0.68, 0.07, 0.3, 0.06, "Z:", true, NMT.gui.tabs[1])
+    NMT.gui.labelMoveZ = guiCreateLabel(0.68, 0.07, 0.3, 0.06, "Z", true, NMT.gui.tabs[1])
     guiLabelSetVerticalAlign(NMT.gui.labelMoveZ, "center")
     NMT.gui.editMoveZ = guiCreateEdit(0.68, 0.13, 0.3, 0.07, "0", true, NMT.gui.tabs[1])
     addEventHandler("onClientGUIChanged", NMT.gui.editMoveZ, NMT.moveXYZ, false)
@@ -67,20 +66,19 @@ local function createGUI()
     -- Rotation section header
     NMT.gui.labelRotationHeader = guiCreateLabel(0.02, 0.22, 0.96, 0.05, "Rotation", true, NMT.gui.tabs[1])
     guiSetFont(NMT.gui.labelRotationHeader, "default-bold-small")
-    guiLabelSetHorizontalAlign(NMT.gui.labelRotationHeader, "center")
 
     -- Rotation inputs
-    NMT.gui.labelRotateX = guiCreateLabel(0.02, 0.28, 0.3, 0.06, "X:", true, NMT.gui.tabs[1])
+    NMT.gui.labelRotateX = guiCreateLabel(0.02, 0.28, 0.3, 0.06, "X", true, NMT.gui.tabs[1])
     guiLabelSetVerticalAlign(NMT.gui.labelRotateX, "center")
     NMT.gui.editRotateX = guiCreateEdit(0.02, 0.34, 0.3, 0.07, "0", true, NMT.gui.tabs[1])
     addEventHandler("onClientGUIChanged", NMT.gui.editRotateX, NMT.rotateXYZ, false)
 
-    NMT.gui.labelRotateY = guiCreateLabel(0.35, 0.28, 0.3, 0.06, "Y:", true, NMT.gui.tabs[1])
+    NMT.gui.labelRotateY = guiCreateLabel(0.35, 0.28, 0.3, 0.06, "Y", true, NMT.gui.tabs[1])
     guiLabelSetVerticalAlign(NMT.gui.labelRotateY, "center")
     NMT.gui.editRotateY = guiCreateEdit(0.35, 0.34, 0.3, 0.07, "0", true, NMT.gui.tabs[1])
     addEventHandler("onClientGUIChanged", NMT.gui.editRotateY, NMT.rotateXYZ, false)
 
-    NMT.gui.labelRotateZ = guiCreateLabel(0.68, 0.28, 0.3, 0.06, "Y:", true, NMT.gui.tabs[1])
+    NMT.gui.labelRotateZ = guiCreateLabel(0.68, 0.28, 0.3, 0.06, "Z", true, NMT.gui.tabs[1])
     guiLabelSetVerticalAlign(NMT.gui.labelRotateZ, "center")
     NMT.gui.editRotateZ = guiCreateEdit(0.68, 0.34, 0.3, 0.07, "0", true, NMT.gui.tabs[1])
     addEventHandler("onClientGUIChanged", NMT.gui.editRotateZ, NMT.rotateXYZ, false)
@@ -88,14 +86,13 @@ local function createGUI()
     -- Properties section header
     NMT.gui.labelPropertiesHeader = guiCreateLabel(0.02, 0.43, 0.96, 0.05, "Properties", true, NMT.gui.tabs[1])
     guiSetFont(NMT.gui.labelPropertiesHeader, "default-bold-small")
-    guiLabelSetHorizontalAlign(NMT.gui.labelPropertiesHeader, "center")
 
     -- Properties inputs
-    NMT.gui.labelModel = guiCreateLabel(0.02, 0.49, 0.3, 0.06, "Model:", true, NMT.gui.tabs[1])
+    NMT.gui.labelModel = guiCreateLabel(0.02, 0.49, 0.3, 0.06, "Model", true, NMT.gui.tabs[1])
     guiLabelSetVerticalAlign(NMT.gui.labelModel, "center")
     NMT.gui.editModel = guiCreateEdit(0.02, 0.55, 0.3, 0.07, "3458", true, NMT.gui.tabs[1])
 
-    NMT.gui.labelScale = guiCreateLabel(0.35, 0.49, 0.3, 0.06, "Scale:", true, NMT.gui.tabs[1])
+    NMT.gui.labelScale = guiCreateLabel(0.35, 0.49, 0.3, 0.06, "Scale", true, NMT.gui.tabs[1])
     guiLabelSetVerticalAlign(NMT.gui.labelScale, "center")
     NMT.gui.editScale = guiCreateEdit(0.35, 0.55, 0.3, 0.07, "1", true, NMT.gui.tabs[1])
 
@@ -125,39 +122,37 @@ local function createGUI()
     -- Position section
     NMT.gui.labelDupPosHeader = guiCreateLabel(0.02, 0.01, 0.96, 0.05, "Position Offset", true, NMT.gui.tabs[2])
     guiSetFont(NMT.gui.labelDupPosHeader, "default-bold-small")
-    guiLabelSetHorizontalAlign(NMT.gui.labelDupPosHeader, "center")
 
-    NMT.gui.labelAddMoveX = guiCreateLabel(0.02, 0.07, 0.3, 0.06, "X:", true, NMT.gui.tabs[2])
+    NMT.gui.labelAddMoveX = guiCreateLabel(0.02, 0.07, 0.3, 0.06, "X", true, NMT.gui.tabs[2])
     guiLabelSetVerticalAlign(NMT.gui.labelAddMoveX, "center")
     NMT.gui.editAddMoveX = guiCreateEdit(0.02, 0.13, 0.3, 0.07, "0", true, NMT.gui.tabs[2])
 
-    NMT.gui.labelAddMoveY = guiCreateLabel(0.35, 0.07, 0.3, 0.06, "Y:", true, NMT.gui.tabs[2])
+    NMT.gui.labelAddMoveY = guiCreateLabel(0.35, 0.07, 0.3, 0.06, "Y", true, NMT.gui.tabs[2])
     guiLabelSetVerticalAlign(NMT.gui.labelAddMoveY, "center")
     NMT.gui.editAddMoveY = guiCreateEdit(0.35, 0.13, 0.3, 0.07, "0", true, NMT.gui.tabs[2])
 
-    NMT.gui.labelAddMoveZ = guiCreateLabel(0.68, 0.07, 0.3, 0.06, "Z:", true, NMT.gui.tabs[2])
+    NMT.gui.labelAddMoveZ = guiCreateLabel(0.68, 0.07, 0.3, 0.06, "Z", true, NMT.gui.tabs[2])
     guiLabelSetVerticalAlign(NMT.gui.labelAddMoveZ, "center")
     NMT.gui.editAddMoveZ = guiCreateEdit(0.68, 0.13, 0.3, 0.07, "0", true, NMT.gui.tabs[2])
 
     -- Rotation section
     NMT.gui.labelDupRotHeader = guiCreateLabel(0.02, 0.22, 0.96, 0.05, "Rotation Offset", true, NMT.gui.tabs[2])
     guiSetFont(NMT.gui.labelDupRotHeader, "default-bold-small")
-    guiLabelSetHorizontalAlign(NMT.gui.labelDupRotHeader, "center")
 
-    NMT.gui.labelAddRotateX = guiCreateLabel(0.02, 0.28, 0.3, 0.06, "X:", true, NMT.gui.tabs[2])
+    NMT.gui.labelAddRotateX = guiCreateLabel(0.02, 0.28, 0.3, 0.06, "X", true, NMT.gui.tabs[2])
     guiLabelSetVerticalAlign(NMT.gui.labelAddRotateX, "center")
     NMT.gui.editAddRotateX = guiCreateEdit(0.02, 0.34, 0.3, 0.07, "0", true, NMT.gui.tabs[2])
 
-    NMT.gui.labelAddRotateY = guiCreateLabel(0.35, 0.28, 0.3, 0.06, "Y:", true, NMT.gui.tabs[2])
+    NMT.gui.labelAddRotateY = guiCreateLabel(0.35, 0.28, 0.3, 0.06, "Y", true, NMT.gui.tabs[2])
     guiLabelSetVerticalAlign(NMT.gui.labelAddRotateY, "center")
     NMT.gui.editAddRotateY = guiCreateEdit(0.35, 0.34, 0.3, 0.07, "0", true, NMT.gui.tabs[2])
 
-    NMT.gui.labelAddRotateZ = guiCreateLabel(0.68, 0.28, 0.3, 0.06, "Z:", true, NMT.gui.tabs[2])
+    NMT.gui.labelAddRotateZ = guiCreateLabel(0.68, 0.28, 0.3, 0.06, "Z", true, NMT.gui.tabs[2])
     guiLabelSetVerticalAlign(NMT.gui.labelAddRotateZ, "center")
     NMT.gui.editAddRotateZ = guiCreateEdit(0.68, 0.34, 0.3, 0.07, "0", true, NMT.gui.tabs[2])
 
     -- Multiplier
-    NMT.gui.labelMultiplier = guiCreateLabel(0.02, 0.43, 0.4, 0.06, "Object Count:", true, NMT.gui.tabs[2])
+    NMT.gui.labelMultiplier = guiCreateLabel(0.02, 0.43, 0.4, 0.06, "Count", true, NMT.gui.tabs[2])
     guiLabelSetVerticalAlign(NMT.gui.labelMultiplier, "center")
     NMT.gui.editMultiplier = guiCreateEdit(0.44, 0.43, 0.54, 0.07, "5", true, NMT.gui.tabs[2])
 
@@ -182,11 +177,10 @@ local function createGUI()
     -- Tab 3: Between
     NMT.gui.tabs[3] = guiCreateTab("Between", NMT.gui.tabPanel)
 
-    NMT.gui.labelBetweenInfo = guiCreateLabel(0.02, 0.02, 0.96, 0.16, "Select 2+ elements with Q.\nObjects connect in selection order.\nLimit: 4 objects recommended.", true, NMT.gui.tabs[3])
-    guiLabelSetHorizontalAlign(NMT.gui.labelBetweenInfo, "center")
+    NMT.gui.labelBetweenInfo = guiCreateLabel(0.02, 0.02, 0.96, 0.16, "Select 2+ elements with Q\nConnects in selection order\nRecommended limit: 4 objects", true, NMT.gui.tabs[3])
     guiLabelSetVerticalAlign(NMT.gui.labelBetweenInfo, "center")
 
-    NMT.gui.labelBetweenAmount = guiCreateLabel(0.02, 0.20, 0.3, 0.07, "Amount:", true, NMT.gui.tabs[3])
+    NMT.gui.labelBetweenAmount = guiCreateLabel(0.02, 0.20, 0.3, 0.07, "Amount", true, NMT.gui.tabs[3])
     guiLabelSetVerticalAlign(NMT.gui.labelBetweenAmount, "center")
     NMT.gui.editBetweenAmount = guiCreateEdit(0.35, 0.20, 0.63, 0.08, "5", true, NMT.gui.tabs[3])
 
@@ -215,8 +209,7 @@ local function createGUI()
     -- Tab 4: AutoShade
     NMT.gui.tabs[4] = guiCreateTab("Shade+", NMT.gui.tabPanel)
 
-    NMT.gui.labelAutoShadeInfo = guiCreateLabel(0.02, 0.01, 0.96, 0.06, "Select element and configure sides:", true, NMT.gui.tabs[4])
-    guiLabelSetVerticalAlign(NMT.gui.labelAutoShadeInfo, "center")
+    NMT.gui.labelAutoShadeInfo = guiCreateLabel(0.02, 0.01, 0.96, 0.06, "Select element and configure sides", true, NMT.gui.tabs[4])
     guiSetFont(NMT.gui.labelAutoShadeInfo, "default-bold-small")
 
     -- Layout
@@ -231,7 +224,7 @@ local function createGUI()
 
     -- Dropdowns
     local row3Y = ry(3)
-    NMT.gui.labelShadeFront = guiCreateLabel(c1, row3Y, 0.18, rowH, "Front:", true, NMT.gui.tabs[4])
+    NMT.gui.labelShadeFront = guiCreateLabel(c1, row3Y, 0.18, rowH, "Front", true, NMT.gui.tabs[4])
     guiLabelSetVerticalAlign(NMT.gui.labelShadeFront, "center")
     NMT.gui.comboShadeFront = guiCreateComboBox(c1 + 0.20, row3Y, 0.78, 0.20, "None", true, NMT.gui.tabs[4])
     guiComboBoxAddItem(NMT.gui.comboShadeFront, "None")
@@ -241,7 +234,7 @@ local function createGUI()
     guiComboBoxSetSelected(NMT.gui.comboShadeFront, 0)
 
     local row4Y = ry(4)
-    NMT.gui.labelShadeBack = guiCreateLabel(c1, row4Y, 0.18, rowH, "Back:", true, NMT.gui.tabs[4])
+    NMT.gui.labelShadeBack = guiCreateLabel(c1, row4Y, 0.18, rowH, "Back", true, NMT.gui.tabs[4])
     guiLabelSetVerticalAlign(NMT.gui.labelShadeBack, "center")
     NMT.gui.comboShadeBack = guiCreateComboBox(c1 + 0.20, row4Y, 0.78, 0.20, "None", true, NMT.gui.tabs[4])
     guiComboBoxAddItem(NMT.gui.comboShadeBack, "None")
@@ -251,8 +244,7 @@ local function createGUI()
     guiComboBoxSetSelected(NMT.gui.comboShadeBack, 0)
 
     -- Type
-    NMT.gui.labelShadeType = guiCreateLabel(c1, ry(5), 0.96, rowH, "Shade Type:", true, NMT.gui.tabs[4])
-    guiLabelSetVerticalAlign(NMT.gui.labelShadeType, "center")
+    NMT.gui.labelShadeType = guiCreateLabel(c1, ry(5), 0.96, rowH, "Shade Type", true, NMT.gui.tabs[4])
     guiSetFont(NMT.gui.labelShadeType, "default-bold-small")
 
     NMT.gui.radioShadeLighter = guiCreateRadioButton(c1, ry(6), 0.48, rowH, "Lighter (3458)", true, NMT.gui.tabs[4])
@@ -286,11 +278,10 @@ local function createGUI()
     end, false)
 
     NMT.gui.labelMirrorPlusInfo = guiCreateLabel(0.02, 0.17, 0.96, 0.06, "Select axes for position and rotation mirroring", true, NMT.gui.tabs[5])
-    guiLabelSetHorizontalAlign(NMT.gui.labelMirrorPlusInfo, "center")
     guiLabelSetVerticalAlign(NMT.gui.labelMirrorPlusInfo, "center")
 
     -- Position mirroring
-    NMT.gui.labelMirrorPlusPosition = guiCreateLabel(0.02, 0.25, 0.96, 0.05, "Mirror Position:", true, NMT.gui.tabs[5])
+    NMT.gui.labelMirrorPlusPosition = guiCreateLabel(0.02, 0.25, 0.96, 0.05, "Mirror Position", true, NMT.gui.tabs[5])
     guiSetFont(NMT.gui.labelMirrorPlusPosition, "default-bold-small")
 
     NMT.gui.checkMirrorPosXPlus = guiCreateCheckBox(0.05, 0.31, 0.28, 0.05, "X+", false, true, NMT.gui.tabs[5])
@@ -301,7 +292,7 @@ local function createGUI()
     NMT.gui.checkMirrorPosZMinus = guiCreateCheckBox(0.69, 0.37, 0.28, 0.05, "Z-", false, true, NMT.gui.tabs[5])
 
     -- Rotation mirroring
-    NMT.gui.labelMirrorPlusRotation = guiCreateLabel(0.02, 0.44, 0.96, 0.05, "Mirror Rotation:", true, NMT.gui.tabs[5])
+    NMT.gui.labelMirrorPlusRotation = guiCreateLabel(0.02, 0.44, 0.96, 0.05, "Mirror Rotation", true, NMT.gui.tabs[5])
     guiSetFont(NMT.gui.labelMirrorPlusRotation, "default-bold-small")
 
     NMT.gui.checkMirrorRotXPlus = guiCreateCheckBox(0.05, 0.50, 0.28, 0.05, "X+", false, true, NMT.gui.tabs[5])
@@ -337,30 +328,29 @@ local function createGUI()
     -- Tab 6: Settings
     NMT.gui.tabs[6] = guiCreateTab("Settings", NMT.gui.tabPanel)
 
-    NMT.gui.labelSettingsInfo = guiCreateLabel(0.02, 0.01, 0.96, 0.05, "Configure NMT Behavior & Keybinds", true, NMT.gui.tabs[6])
-    guiLabelSetHorizontalAlign(NMT.gui.labelSettingsInfo, "center")
+    NMT.gui.labelSettingsInfo = guiCreateLabel(0.02, 0.01, 0.96, 0.05, "Settings", true, NMT.gui.tabs[6])
     guiSetFont(NMT.gui.labelSettingsInfo, "default-bold-small")
 
     -- Key Binds
     local yPos = 0.08
-    NMT.gui.labelKeyBinds = guiCreateLabel(0.02, yPos, 0.96, 0.04, "Key Binds:", true, NMT.gui.tabs[6])
+    NMT.gui.labelKeyBinds = guiCreateLabel(0.02, yPos, 0.96, 0.04, "Key Binds", true, NMT.gui.tabs[6])
     guiSetFont(NMT.gui.labelKeyBinds, "default-bold-small")
 
     yPos = yPos + 0.05
-    NMT.gui.labelSelectKey = guiCreateLabel(0.02, yPos, 0.38, 0.045, "Select element key:", true, NMT.gui.tabs[6])
+    NMT.gui.labelSelectKey = guiCreateLabel(0.02, yPos, 0.38, 0.045, "Select key", true, NMT.gui.tabs[6])
     guiLabelSetVerticalAlign(NMT.gui.labelSelectKey, "center")
     NMT.gui.editSelectKey = guiCreateEdit(0.42, yPos, 0.18, 0.045, NMT.settings.keyBindSelect, true, NMT.gui.tabs[6])
     guiEditSetMaxLength(NMT.gui.editSelectKey, 1)
 
     yPos = yPos + 0.055
-    NMT.gui.labelToggleGUIKey = guiCreateLabel(0.02, yPos, 0.38, 0.045, "Toggle GUI key:", true, NMT.gui.tabs[6])
+    NMT.gui.labelToggleGUIKey = guiCreateLabel(0.02, yPos, 0.38, 0.045, "Toggle GUI key", true, NMT.gui.tabs[6])
     guiLabelSetVerticalAlign(NMT.gui.labelToggleGUIKey, "center")
     NMT.gui.editToggleGUIKey = guiCreateEdit(0.42, yPos, 0.18, 0.045, NMT.settings.keyBindToggleGUI, true, NMT.gui.tabs[6])
     guiEditSetMaxLength(NMT.gui.editToggleGUIKey, 1)
 
     -- Selection Mode
     yPos = yPos + 0.07
-    NMT.gui.labelSelectionMode = guiCreateLabel(0.02, yPos, 0.96, 0.04, "Selection Mode:", true, NMT.gui.tabs[6])
+    NMT.gui.labelSelectionMode = guiCreateLabel(0.02, yPos, 0.96, 0.04, "Selection Mode", true, NMT.gui.tabs[6])
     guiSetFont(NMT.gui.labelSelectionMode, "default-bold-small")
 
     yPos = yPos + 0.05
@@ -380,7 +370,7 @@ local function createGUI()
 
     -- Auto-update info
     yPos = yPos + 0.03
-    NMT.gui.labelAutoUpdate = guiCreateLabel(0.02, yPos, 0.96, 0.04, "Auto-updater:", true, NMT.gui.tabs[6])
+    NMT.gui.labelAutoUpdate = guiCreateLabel(0.02, yPos, 0.96, 0.04, "Auto-updater", true, NMT.gui.tabs[6])
     guiSetFont(NMT.gui.labelAutoUpdate, "default-bold-small")
 
     yPos = yPos + 0.05
