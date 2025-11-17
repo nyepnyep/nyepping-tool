@@ -5,9 +5,17 @@ local AUTO_UPDATE_ENABLED = false -- Disabled due to nested directory issues wit
 local AUTO_UPDATE_INTERVAL = 3600000 -- Check every hour (in milliseconds)
 -- Raw GitHub URL for the repository where updates are hosted. (Updated to the provided repo)
 local GITHUB_REPO_URL = "https://raw.githubusercontent.com/nyepnyep/nyepping-tool/main/"
-local NMT_VERSION = "1.0.20"
 
-outputChatBox ("c")
+-- Get version from meta.xml
+local NMT_VERSION = "unknown"
+local metaXML = xmlLoadFile("meta.xml")
+if metaXML then
+    local infoNode = xmlFindChild(metaXML, "info", 0)
+    if infoNode then
+        NMT_VERSION = xmlNodeGetAttribute(infoNode, "version") or "unknown"
+    end
+    xmlUnloadFile(metaXML)
+end
 
 -- Helper function to compare versions
 local function compareVersions(v1, v2)
