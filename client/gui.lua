@@ -391,10 +391,12 @@ local function createGUI()
     guiSetFont(NMT.gui.labelSelectionMode, "default-bold-small")
     
     yPos = yPos + 0.06
+    -- Create radio button group for selection mode
     NMT.gui.radioSelectionPerObject = guiCreateRadioButton(0.02, yPos, 0.96, 0.05, "Per-object: Press key for each object", true, NMT.gui.tabs[6])
     
     yPos = yPos + 0.06
     NMT.gui.radioSelectionToggle = guiCreateRadioButton(0.02, yPos, 0.96, 0.05, "Toggle: Press once to start, click objects, press again to confirm", true, NMT.gui.tabs[6])
+    guiRadioButtonSetGroup(NMT.gui.radioSelectionToggle, NMT.gui.radioSelectionPerObject)
     
     -- Set default selection mode
     if NMT.settings.selectionMode == "toggle" then
@@ -409,10 +411,12 @@ local function createGUI()
     guiSetFont(NMT.gui.labelAutoShadeMode, "default-bold-small")
     
     yPos = yPos + 0.06
+    -- Create separate radio button group for AutoShade mode
     NMT.gui.radioAutoShadeSingle = guiCreateRadioButton(0.02, yPos, 0.96, 0.05, "Apply to currently selected element only", true, NMT.gui.tabs[6])
     
     yPos = yPos + 0.06
     NMT.gui.radioAutoShadeGroup = guiCreateRadioButton(0.02, yPos, 0.96, 0.05, "Apply to all selected elements", true, NMT.gui.tabs[6])
+    guiRadioButtonSetGroup(NMT.gui.radioAutoShadeGroup, NMT.gui.radioAutoShadeSingle)
     
     -- Set default autoshade mode
     if NMT.settings.autoShadeMode == "group" then
@@ -427,8 +431,11 @@ local function createGUI()
     guiSetFont(NMT.gui.labelAutoUpdate, "default-bold-small")
     
     yPos = yPos + 0.06
-    NMT.gui.labelAutoUpdateInfo = guiCreateLabel(0.02, yPos, 0.96, 0.08, "Enabled (server-side)\nAutomatically checks for updates hourly\nUse /nmtupdate to check manually", true, NMT.gui.tabs[6])
+    NMT.gui.labelAutoUpdateInfo = guiCreateLabel(0.02, yPos, 0.96, 0.08, "Loading...", true, NMT.gui.tabs[6])
     guiLabelSetColor(NMT.gui.labelAutoUpdateInfo, 200, 200, 200)
+    
+    -- Request auto-update status from server
+    triggerServerEvent("nmt:requestAutoUpdateStatus", localPlayer)
     
     -- Apply/Save button
     yPos = yPos + 0.10
@@ -438,6 +445,20 @@ local function createGUI()
     NMT.gui.buttonResetSettings = guiCreateButton(0.51, yPos, 0.47, 0.08, "Reset to Defaults", true, NMT.gui.tabs[6])
     addEventHandler("onClientGUIClick", NMT.gui.buttonResetSettings, NMT.resetSettings, false)
 end
+
+-- Event handler to receive auto-update status from server
+addEvent("nmt:receiveAutoUpdateStatus", true)
+addEventHandler("nmt:receiveAutoUpdateStatus", root, function(enabled)
+    if NMT.gui and NMT.gui.labelAutoUpdateInfo then
+        if enabled then
+            guiSetText(NMT.gui.labelAutoUpdateInfo, "Enabled (server-side)\nAutomatically checks for updates hourly\nUse /nmtupdate to check manually")
+            guiLabelSetColor(NMT.gui.labelAutoUpdateInfo, 0, 255, 0)
+        else
+            guiSetText(NMT.gui.labelAutoUpdateInfo, "Disabled (server-side)\nUse /nmtupdate to check manually")
+            guiLabelSetColor(NMT.gui.labelAutoUpdateInfo, 255, 100, 0)
+        end
+    end
+end)
 
 -- Initialize GUI on resource start
 addEventHandler("onClientResourceStart", getResourceRootElement(getThisResource()), createGUI)

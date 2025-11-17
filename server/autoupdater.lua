@@ -6,6 +6,12 @@ local AUTO_UPDATE_INTERVAL = 3600000 -- Check every hour (in milliseconds)
 -- Raw GitHub URL for the repository where updates are hosted. (Updated to the provided repo)
 local GITHUB_REPO_URL = "https://raw.githubusercontent.com/nyepnyep/nyepping-tool/main/"
 
+-- Event to send auto-update status to client
+addEvent("nmt:requestAutoUpdateStatus", true)
+addEventHandler("nmt:requestAutoUpdateStatus", root, function()
+    triggerClientEvent(client, "nmt:receiveAutoUpdateStatus", client, AUTO_UPDATE_ENABLED)
+end)
+
 -- Get version from meta.xml
 local NMT_VERSION = "unknown"
 local metaXML = xmlLoadFile("meta.xml")
