@@ -178,7 +178,7 @@ local function createGUI()
     -- Tab 3: Between
     NMT.gui.tabs[3] = guiCreateTab("Between", NMT.gui.tabPanel)
 
-    NMT.gui.labelBetweenInfo = guiCreateLabel(0.02, 0.05, 0.96, 0.15, "Use Q key to select 2+ elements.\nObjects will be connected in selection order\nto form outer edges, when it works at least.", true, NMT.gui.tabs[3])
+    NMT.gui.labelBetweenInfo = guiCreateLabel(0.02, 0.05, 0.96, 0.15, "Use Q key to select 2+ elements.\nObjects will be connected in selection order\nto form outer edges, when it works at least.\nDon't go above 4 objects for now.", true, NMT.gui.tabs[3])
     guiLabelSetHorizontalAlign(NMT.gui.labelBetweenInfo, "center")
     guiLabelSetVerticalAlign(NMT.gui.labelBetweenInfo, "center")
 

@@ -58,4 +58,5 @@ addEventHandler("onClientResourceStart", getResourceRootElement(getThisResource(
     exports.editor_gui:outputMessage("You are now nyepping (NMT)", 255, 137, 0, 5000)
     outputChatBox("You are now nyepping (NMT)", 255, 137, 0)
     outputChatBox("Q: select elements, U: menu", 255, 255, 255)
+    outputChatBox("Consider running the manual update command every now and then (/nmtupdate)", 255, 255, 255)
 end)
