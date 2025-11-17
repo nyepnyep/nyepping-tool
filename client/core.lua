@@ -60,4 +60,4 @@ addEventHandler("onClientResourceStart", getResourceRootElement(getThisResource(
     outputChatBox("Q: select elements, U: menu", 255, 255, 255)
 end)
 
-outputChatBox ("a")
+outputChatBox ("b")
