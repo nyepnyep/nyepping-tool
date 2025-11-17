@@ -1,7 +1,7 @@
 <meta>
     <oop>true</oop>
 
-    <info author="foxxnyep" name="NMT" version="1.0.36" type="misc"/>
+    <info author="foxxnyep" name="NMT" version="1.0.37" type="misc"/>
     
     <!-- Utility scripts (shared) -->
     <script type="server" src="utils/rotation.lua" />
