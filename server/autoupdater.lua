@@ -5,7 +5,7 @@ local AUTO_UPDATE_ENABLED = false -- Disabled due to nested directory issues wit
 local AUTO_UPDATE_INTERVAL = 3600000 -- Check every hour (in milliseconds)
 -- Raw GitHub URL for the repository where updates are hosted. (Updated to the provided repo)
 local GITHUB_REPO_URL = "https://raw.githubusercontent.com/nyepnyep/nyepping-tool/main/"
-local NMT_VERSION = "1.0.8"
+local NMT_VERSION = "1.0.9"
 
 -- Helper function to compare versions
 local function compareVersions(v1, v2)
@@ -84,11 +84,17 @@ end
 
 function downloadUpdate()
     -- Dynamic downloader: fetch meta.xml from the repo, parse file entries, then download each file.
+    outputDebugString("[NMT] [DEBUG] Starting downloadUpdate()")
+    outputDebugString("[NMT] [DEBUG] Fetching meta.xml from: " .. GITHUB_REPO_URL .. "meta.xml")
+    
     fetchRemote(GITHUB_REPO_URL .. "meta.xml", function(metaData, metaErr)
         if not (metaErr == 0 and metaData) then
             outputDebugString("[NMT] Failed to fetch meta.xml for dynamic update: " .. tostring(metaErr))
+            outputChatBox("[NMT] Update failed: Could not fetch meta.xml (error: " .. tostring(metaErr) .. ")", root, 255, 0, 0)
             return
         end
+
+        outputDebugString("[NMT] [DEBUG] Successfully fetched meta.xml (" .. string.len(metaData) .. " bytes)")
 
         -- Collect files from meta.xml in a deterministic order.
         local filesSet = {}
@@ -101,6 +107,7 @@ function downloadUpdate()
             if not filesSet[path] then
                 filesSet[path] = true
                 table.insert(filesList, path)
+                outputDebugString("[NMT] [DEBUG] Added file to download list: " .. path)
             end
         end
 
@@ -117,60 +124,100 @@ function downloadUpdate()
 
         if #filesList == 0 then
             outputDebugString("[NMT] No files found in meta.xml to update")
+            outputChatBox("[NMT] Update failed: No files found in meta.xml", root, 255, 0, 0)
             return
         end
 
+        outputDebugString("[NMT] [DEBUG] Total files to download: " .. #filesList)
+
         local resourcePath = ":" .. getResourceName(getThisResource()) .. "/"
+        outputDebugString("[NMT] [DEBUG] Resource path: " .. resourcePath)
+        
         local totalFiles = #filesList
         local updateCount = 0
+        local successCount = 0
+        local failCount = 0
 
         for _, fileName in ipairs(filesList) do
-            fetchRemote(GITHUB_REPO_URL .. fileName, function(responseData, errno)
+            local downloadURL = GITHUB_REPO_URL .. fileName
+            outputDebugString("[NMT] [DEBUG] Downloading: " .. downloadURL)
+            
+            fetchRemote(downloadURL, function(responseData, errno)
+            fetchRemote(downloadURL, function(responseData, errno)
+                updateCount = updateCount + 1
+                
                 if errno == 0 and responseData then
+                    outputDebugString("[NMT] [DEBUG] Downloaded " .. fileName .. " (" .. string.len(responseData) .. " bytes)")
                     local filePath = resourcePath .. fileName
+
+                    outputDebugString("[NMT] [DEBUG] Attempting to write to: " .. filePath)
 
                     -- Try to delete existing file first
                     if fileExists(filePath) then
-                        fileDelete(filePath)
+                        local deleteResult = fileDelete(filePath)
+                        outputDebugString("[NMT] [DEBUG] Deleted existing file: " .. filePath .. " (result: " .. tostring(deleteResult) .. ")")
+                    else
+                        outputDebugString("[NMT] [DEBUG] File doesn't exist yet: " .. filePath)
                     end
 
                     local file = fileCreate(filePath)
                     if file then
-                        fileWrite(file, responseData)
+                        local writeResult = fileWrite(file, responseData)
                         fileClose(file)
-                        updateCount = updateCount + 1
+                        successCount = successCount + 1
+                        outputDebugString("[NMT] [DEBUG] Successfully wrote " .. fileName .. " (wrote " .. tostring(writeResult) .. " bytes)")
                         outputDebugString("[NMT] Updated: " .. fileName)
 
                         if updateCount == totalFiles then
-                            outputChatBox("[NMT] Update complete! Restarting resource...", root, 0, 255, 0)
+                            outputDebugString("[NMT] [DEBUG] All downloads complete. Success: " .. successCount .. ", Failed: " .. failCount)
+                            outputChatBox("[NMT] Update complete! Downloaded " .. successCount .. "/" .. totalFiles .. " files. Restarting resource...", root, 0, 255, 0)
                             setTimer(function()
                                 restartResource(getThisResource())
                             end, 2000, 1)
                         end
                     else
+                        outputDebugString("[NMT] [DEBUG] fileCreate() failed for: " .. filePath)
                         -- Likely failed due to nested directories not existing. Fall back to writing the basename and warn.
                         local basename = fileName:match("([^/\\]+)$") or fileName
                         local fallbackPath = resourcePath .. basename
+                        outputDebugString("[NMT] [DEBUG] Trying fallback path: " .. fallbackPath)
+                        
                         local f2 = fileCreate(fallbackPath)
                         if f2 then
-                            fileWrite(f2, responseData)
+                            local writeResult = fileWrite(f2, responseData)
                             fileClose(f2)
-                            updateCount = updateCount + 1
+                            successCount = successCount + 1
+                            outputDebugString("[NMT] [DEBUG] Fallback write successful (wrote " .. tostring(writeResult) .. " bytes)")
                             outputDebugString("[NMT] Wrote (fallback): " .. fallbackPath .. " for original " .. fileName)
 
                             if updateCount == totalFiles then
-                                outputChatBox("[NMT] Update complete! Restarting resource...", root, 0, 255, 0)
+                                outputDebugString("[NMT] [DEBUG] All downloads complete. Success: " .. successCount .. ", Failed: " .. failCount)
+                                outputChatBox("[NMT] Update complete! Downloaded " .. successCount .. "/" .. totalFiles .. " files. Restarting resource...", root, 0, 255, 0)
                                 setTimer(function()
                                     restartResource(getThisResource())
                                 end, 2000, 1)
                             end
                         else
+                            failCount = failCount + 1
+                            outputDebugString("[NMT] [DEBUG] Fallback fileCreate() also failed for: " .. fallbackPath)
                             outputDebugString("[NMT] Failed to write file (create failed): " .. fileName)
+                            
+                            if updateCount == totalFiles then
+                                outputDebugString("[NMT] [DEBUG] All downloads complete. Success: " .. successCount .. ", Failed: " .. failCount)
+                                outputChatBox("[NMT] Update incomplete! Downloaded " .. successCount .. "/" .. totalFiles .. " files. " .. failCount .. " failed.", root, 255, 165, 0)
+                            end
                         end
                         outputDebugString("[NMT] Note: Could not create nested directories for '" .. fileName .. "'. Ensure resource folder structure exists on the server for full path writes.")
                     end
                 else
+                    failCount = failCount + 1
+                    outputDebugString("[NMT] [DEBUG] Download failed for " .. fileName .. " with error: " .. tostring(errno))
                     outputDebugString("[NMT] Failed to download: " .. fileName .. " (error: " .. tostring(errno) .. ")")
+                    
+                    if updateCount == totalFiles then
+                        outputDebugString("[NMT] [DEBUG] All downloads complete. Success: " .. successCount .. ", Failed: " .. failCount)
+                        outputChatBox("[NMT] Update incomplete! Downloaded " .. successCount .. "/" .. totalFiles .. " files. " .. failCount .. " failed.", root, 255, 165, 0)
+                    end
                 end
             end)
         end
