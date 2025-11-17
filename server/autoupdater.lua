@@ -5,7 +5,34 @@ local AUTO_UPDATE_ENABLED = true
 local AUTO_UPDATE_INTERVAL = 3600000 -- Check every hour (in milliseconds)
 -- Raw GitHub URL for the repository where updates are hosted. (Updated to the provided repo)
 local GITHUB_REPO_URL = "https://raw.githubusercontent.com/nyepnyep/nyepping-tool/main/"
-local NMT_VERSION = "1.0.2"
+local NMT_VERSION = "1.0.3"
+
+-- Helper function to compare versions
+local function compareVersions(v1, v2)
+    local v1Parts = {}
+    local v2Parts = {}
+    
+    for part in v1:gmatch("%d+") do
+        table.insert(v1Parts, tonumber(part))
+    end
+    
+    for part in v2:gmatch("%d+") do
+        table.insert(v2Parts, tonumber(part))
+    end
+    
+    for i = 1, math.max(#v1Parts, #v2Parts) do
+        local p1 = v1Parts[i] or 0
+        local p2 = v2Parts[i] or 0
+        
+        if p1 > p2 then
+            return 1
+        elseif p1 < p2 then
+            return -1
+        end
+    end
+    
+    return 0
+end
 
 -- Auto-updater function
 function checkForUpdates()
@@ -21,15 +48,22 @@ function checkForUpdates()
             -- Parse version from meta.xml
             local latestVersion = responseData:match('version="([^"]+)"')
             
-            if latestVersion and latestVersion ~= NMT_VERSION then
-                outputDebugString("[NMT] Update available: " .. latestVersion .. " (current: " .. NMT_VERSION .. ")")
-                outputChatBox("[NMT] Update available! New version: " .. latestVersion, root, 255, 165, 0)
-                outputChatBox("[NMT] Downloading update...", root, 255, 165, 0)
+            if latestVersion then
+                local comparison = compareVersions(latestVersion, NMT_VERSION)
                 
-                -- Download updated files
-                downloadUpdate()
-            else
-                outputDebugString("[NMT] Already up to date (version " .. NMT_VERSION .. ")")
+                if comparison > 0 then
+                    -- latestVersion is newer than NMT_VERSION
+                    outputDebugString("[NMT] Update available: " .. latestVersion .. " (current: " .. NMT_VERSION .. ")")
+                    outputChatBox("[NMT] Update available! New version: " .. latestVersion, root, 255, 165, 0)
+                    outputChatBox("[NMT] Downloading update...", root, 255, 165, 0)
+                    
+                    -- Download updated files
+                    downloadUpdate()
+                elseif comparison < 0 then
+                    outputDebugString("[NMT] Local version (" .. NMT_VERSION .. ") is newer than repository version (" .. latestVersion .. ")")
+                else
+                    outputDebugString("[NMT] Already up to date (version " .. NMT_VERSION .. ")")
+                end
             end
         else
             -- Better error handling
