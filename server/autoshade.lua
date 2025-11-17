@@ -215,7 +215,6 @@ addEventHandler("nmt:autoShade", root, function(element, sides, elemid)
         createdCount = createdCount + 1
         table.insert(createdElements, shade)
     end
-    end
     
     triggerClientEvent(source, "nmt:sendAutoShadeData", source, createdElements)
     outputChatBox("NMT: Created " .. createdCount .. " shade object" .. (createdCount == 1 and "" or "s"), source, 0, 255, 0)
