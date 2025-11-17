@@ -1,6 +1,6 @@
 <meta>
     <oop>true</oop>
-    <info author="Nyeps Collective" name="NMT" version="1.0.4" type="misc"/>
+    <info author="Nyeps Collective" name="NMT" version="1.0.5" type="misc"/>
     
     <!-- Utility scripts (shared) -->
     <script type="server" src="utils/rotation.lua" />
