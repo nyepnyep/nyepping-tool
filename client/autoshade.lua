@@ -15,19 +15,37 @@ function NMT.applyAutoShade()
     
     -- Get front selection from dropdown
     local frontSelected = guiComboBoxGetSelected(NMT.gui.comboShadeFront)
-    if frontSelected > 0 then -- 0 is "None"
+    if frontSelected > 0 then
         local frontObj = NMT.autoShadeObjects.front[frontSelected]
         if frontObj then
-            sides["asFront"] = frontObj
+            -- Convert Vector3 to table for network transmission
+            sides["asFront"] = {
+                id = frontObj.id,
+                name = frontObj.name,
+                model = frontObj.model,
+                position = {x = frontObj.position.x, y = frontObj.position.y, z = frontObj.position.z},
+                rotation = frontObj.rotation,
+                scale = frontObj.scale,
+                doublesided = frontObj.doublesided
+            }
         end
     end
     
     -- Get back selection from dropdown
     local backSelected = guiComboBoxGetSelected(NMT.gui.comboShadeBack)
-    if backSelected > 0 then -- 0 is "None"
+    if backSelected > 0 then
         local backObj = NMT.autoShadeObjects.back[backSelected]
         if backObj then
-            sides["asBack"] = backObj
+            -- Convert Vector3 to table for network transmission
+            sides["asBack"] = {
+                id = backObj.id,
+                name = backObj.name,
+                model = backObj.model,
+                position = {x = backObj.position.x, y = backObj.position.y, z = backObj.position.z},
+                rotation = backObj.rotation,
+                scale = backObj.scale,
+                doublesided = backObj.doublesided
+            }
         end
     end
 

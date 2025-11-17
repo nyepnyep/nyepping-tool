@@ -21,148 +21,152 @@ local function createGUI()
     local labels = getLabels()
     
     NMT.gui = {}
-    NMT.gui.window = guiCreateWindow(0.05, 0.2, 0.25, 0.5, "nyepping tool (nmt)", true)
+    -- Modern window with better positioning (moved down from title bar)
+    NMT.gui.window = guiCreateWindow(0.05, 0.25, 0.28, 0.52, "Nyepping Tool", true)
     guiWindowSetMovable(NMT.gui.window, true)
     guiWindowSetSizable(NMT.gui.window, false)
     guiSetVisible(NMT.gui.window, false)
 
-    NMT.gui.tabPanel = guiCreateTabPanel(0, 0.02, 1, 0.88, true, NMT.gui.window)
+    -- Tab panel with padding from top
+    NMT.gui.tabPanel = guiCreateTabPanel(0.02, 0.04, 0.96, 0.84, true, NMT.gui.window)
     NMT.gui.tabs = {}
 
     -- Bottom section for selection info and deselect button
-    NMT.gui.labelElementsToStack = guiCreateLabel(0.02, 0.91, 0.48, 0.07, "Selected elements: 0", true, NMT.gui.window)
+    NMT.gui.labelElementsToStack = guiCreateLabel(0.02, 0.89, 0.48, 0.09, "Selected elements: 0", true, NMT.gui.window)
     guiLabelSetVerticalAlign(NMT.gui.labelElementsToStack, "center")
-    NMT.gui.buttonDeselectAll = guiCreateButton(0.5, 0.91, 0.48, 0.07, labels["performDeselectAll"], true, NMT.gui.window)
+    guiSetFont(NMT.gui.labelElementsToStack, "default-bold-small")
+    
+    NMT.gui.buttonDeselectAll = guiCreateButton(0.52, 0.89, 0.46, 0.09, labels["performDeselectAll"], true, NMT.gui.window)
     guiSetEnabled(NMT.gui.buttonDeselectAll, false)
     addEventHandler("onClientGUIClick", NMT.gui.buttonDeselectAll, NMT.deselectAllElements, false)
-    NMT.gui.tabs = {}
 
     -- Tab 1: Transform
     NMT.gui.tabs[1] = guiCreateTab("F3+", NMT.gui.tabPanel)
 
+    -- Position section header
+    NMT.gui.labelPositionHeader = guiCreateLabel(0.02, 0.01, 0.96, 0.05, "Position", true, NMT.gui.tabs[1])
+    guiSetFont(NMT.gui.labelPositionHeader, "default-bold-small")
+    guiLabelSetHorizontalAlign(NMT.gui.labelPositionHeader, "center")
+
     -- Position inputs
-    NMT.gui.labelMoveX = guiCreateLabel(0.02, 0.02, 0.3, 0.08, "position (x):", true, NMT.gui.tabs[1])
-    guiLabelSetHorizontalAlign(NMT.gui.labelMoveX, "center")
+    NMT.gui.labelMoveX = guiCreateLabel(0.02, 0.07, 0.3, 0.06, "X:", true, NMT.gui.tabs[1])
     guiLabelSetVerticalAlign(NMT.gui.labelMoveX, "center")
-    NMT.gui.editMoveX = guiCreateEdit(0.02, 0.1, 0.3, 0.08, "0", true, NMT.gui.tabs[1])
+    NMT.gui.editMoveX = guiCreateEdit(0.02, 0.13, 0.3, 0.07, "0", true, NMT.gui.tabs[1])
     addEventHandler("onClientGUIChanged", NMT.gui.editMoveX, NMT.moveXYZ, false)
 
-    NMT.gui.labelMoveY = guiCreateLabel(0.35, 0.02, 0.3, 0.08, "position (y):", true, NMT.gui.tabs[1])
-    guiLabelSetHorizontalAlign(NMT.gui.labelMoveY, "center")
+    NMT.gui.labelMoveY = guiCreateLabel(0.35, 0.07, 0.3, 0.06, "Y:", true, NMT.gui.tabs[1])
     guiLabelSetVerticalAlign(NMT.gui.labelMoveY, "center")
-    NMT.gui.editMoveY = guiCreateEdit(0.35, 0.1, 0.3, 0.08, "0", true, NMT.gui.tabs[1])
+    NMT.gui.editMoveY = guiCreateEdit(0.35, 0.13, 0.3, 0.07, "0", true, NMT.gui.tabs[1])
     addEventHandler("onClientGUIChanged", NMT.gui.editMoveY, NMT.moveXYZ, false)
 
-    NMT.gui.labelMoveZ = guiCreateLabel(0.68, 0.02, 0.3, 0.08, "position (z):", true, NMT.gui.tabs[1])
-    guiLabelSetHorizontalAlign(NMT.gui.labelMoveZ, "center")
+    NMT.gui.labelMoveZ = guiCreateLabel(0.68, 0.07, 0.3, 0.06, "Z:", true, NMT.gui.tabs[1])
     guiLabelSetVerticalAlign(NMT.gui.labelMoveZ, "center")
-    NMT.gui.editMoveZ = guiCreateEdit(0.68, 0.1, 0.3, 0.08, "0", true, NMT.gui.tabs[1])
+    NMT.gui.editMoveZ = guiCreateEdit(0.68, 0.13, 0.3, 0.07, "0", true, NMT.gui.tabs[1])
     addEventHandler("onClientGUIChanged", NMT.gui.editMoveZ, NMT.moveXYZ, false)
 
+    -- Rotation section header
+    NMT.gui.labelRotationHeader = guiCreateLabel(0.02, 0.22, 0.96, 0.05, "Rotation", true, NMT.gui.tabs[1])
+    guiSetFont(NMT.gui.labelRotationHeader, "default-bold-small")
+    guiLabelSetHorizontalAlign(NMT.gui.labelRotationHeader, "center")
+
     -- Rotation inputs
-    NMT.gui.labelRotateX = guiCreateLabel(0.02, 0.19, 0.3, 0.08, "rotation (x):", true, NMT.gui.tabs[1])
-    guiLabelSetHorizontalAlign(NMT.gui.labelRotateX, "center")
+    NMT.gui.labelRotateX = guiCreateLabel(0.02, 0.28, 0.3, 0.06, "X:", true, NMT.gui.tabs[1])
     guiLabelSetVerticalAlign(NMT.gui.labelRotateX, "center")
-    NMT.gui.editRotateX = guiCreateEdit(0.02, 0.27, 0.3, 0.08, "0", true, NMT.gui.tabs[1])
+    NMT.gui.editRotateX = guiCreateEdit(0.02, 0.34, 0.3, 0.07, "0", true, NMT.gui.tabs[1])
     addEventHandler("onClientGUIChanged", NMT.gui.editRotateX, NMT.rotateXYZ, false)
 
-    NMT.gui.labelRotateY = guiCreateLabel(0.35, 0.19, 0.3, 0.08, "rotation (y):", true, NMT.gui.tabs[1])
-    guiLabelSetHorizontalAlign(NMT.gui.labelRotateY, "center")
+    NMT.gui.labelRotateY = guiCreateLabel(0.35, 0.28, 0.3, 0.06, "Y:", true, NMT.gui.tabs[1])
     guiLabelSetVerticalAlign(NMT.gui.labelRotateY, "center")
-    NMT.gui.editRotateY = guiCreateEdit(0.35, 0.27, 0.3, 0.08, "0", true, NMT.gui.tabs[1])
+    NMT.gui.editRotateY = guiCreateEdit(0.35, 0.34, 0.3, 0.07, "0", true, NMT.gui.tabs[1])
     addEventHandler("onClientGUIChanged", NMT.gui.editRotateY, NMT.rotateXYZ, false)
 
-    NMT.gui.labelRotateZ = guiCreateLabel(0.68, 0.19, 0.3, 0.08, "rotation (z):", true, NMT.gui.tabs[1])
-    guiLabelSetHorizontalAlign(NMT.gui.labelRotateZ, "center")
+    NMT.gui.labelRotateZ = guiCreateLabel(0.68, 0.28, 0.3, 0.06, "Y:", true, NMT.gui.tabs[1])
     guiLabelSetVerticalAlign(NMT.gui.labelRotateZ, "center")
-    NMT.gui.editRotateZ = guiCreateEdit(0.68, 0.27, 0.3, 0.08, "0", true, NMT.gui.tabs[1])
+    NMT.gui.editRotateZ = guiCreateEdit(0.68, 0.34, 0.3, 0.07, "0", true, NMT.gui.tabs[1])
     addEventHandler("onClientGUIChanged", NMT.gui.editRotateZ, NMT.rotateXYZ, false)
 
-    -- Properties section
-    NMT.gui.labelModel = guiCreateLabel(0.02, 0.38, 0.3, 0.08, "model:", true, NMT.gui.tabs[1])
-    guiLabelSetHorizontalAlign(NMT.gui.labelModel, "center")
+    -- Properties section header
+    NMT.gui.labelPropertiesHeader = guiCreateLabel(0.02, 0.43, 0.96, 0.05, "Properties", true, NMT.gui.tabs[1])
+    guiSetFont(NMT.gui.labelPropertiesHeader, "default-bold-small")
+    guiLabelSetHorizontalAlign(NMT.gui.labelPropertiesHeader, "center")
+
+    -- Properties inputs
+    NMT.gui.labelModel = guiCreateLabel(0.02, 0.49, 0.3, 0.06, "Model:", true, NMT.gui.tabs[1])
     guiLabelSetVerticalAlign(NMT.gui.labelModel, "center")
-    NMT.gui.editModel = guiCreateEdit(0.02, 0.46, 0.3, 0.08, "3458", true, NMT.gui.tabs[1])
+    NMT.gui.editModel = guiCreateEdit(0.02, 0.55, 0.3, 0.07, "3458", true, NMT.gui.tabs[1])
 
-    NMT.gui.labelScale = guiCreateLabel(0.35, 0.38, 0.3, 0.08, "scale:", true, NMT.gui.tabs[1])
-    guiLabelSetHorizontalAlign(NMT.gui.labelScale, "center")
+    NMT.gui.labelScale = guiCreateLabel(0.35, 0.49, 0.3, 0.06, "Scale:", true, NMT.gui.tabs[1])
     guiLabelSetVerticalAlign(NMT.gui.labelScale, "center")
-    NMT.gui.editScale = guiCreateEdit(0.35, 0.46, 0.3, 0.08, "1", true, NMT.gui.tabs[1])
+    NMT.gui.editScale = guiCreateEdit(0.35, 0.55, 0.3, 0.07, "1", true, NMT.gui.tabs[1])
 
-    NMT.gui.checkboxCollisions = guiCreateCheckBox(0.02, 0.56, 0.3, 0.08, "Collisions", true, true, NMT.gui.tabs[1])
-    NMT.gui.checkboxDoublesided = guiCreateCheckBox(0.35, 0.56, 0.3, 0.08, "Doublesided", true, true, NMT.gui.tabs[1])
+    -- Checkboxes
+    NMT.gui.checkboxCollisions = guiCreateCheckBox(0.02, 0.64, 0.46, 0.06, "Collisions", true, true, NMT.gui.tabs[1])
+    NMT.gui.checkboxDoublesided = guiCreateCheckBox(0.52, 0.64, 0.46, 0.06, "Doublesided", true, true, NMT.gui.tabs[1])
 
-    -- Transform section buttons
-    NMT.gui.labelTransform = guiCreateLabel(0.02, 0.66, 0.46, 0.06, "Transform:", true, NMT.gui.tabs[1])
-    guiLabelSetVerticalAlign(NMT.gui.labelTransform, "center")
-    guiSetFont(NMT.gui.labelTransform, "default-bold-small")
-
-    NMT.gui.buttonApplyXYZ = guiCreateButton(0.02, 0.74, 0.46, 0.08, "Apply Transform", true, NMT.gui.tabs[1])
+    -- Action buttons (2 columns)
+    NMT.gui.buttonApplyXYZ = guiCreateButton(0.02, 0.72, 0.48, 0.08, "Apply Transform", true, NMT.gui.tabs[1])
     guiSetEnabled(NMT.gui.buttonApplyXYZ, false)
     addEventHandler("onClientGUIClick", NMT.gui.buttonApplyXYZ, NMT.saveXYZ, false)
 
-    NMT.gui.buttonResetInput = guiCreateButton(0.02, 0.85, 0.46, 0.08, labels["resetInput"], true, NMT.gui.tabs[1])
+    NMT.gui.buttonResetInput = guiCreateButton(0.52, 0.72, 0.46, 0.08, labels["resetInput"], true, NMT.gui.tabs[1])
     addEventHandler("onClientGUIClick", NMT.gui.buttonResetInput, NMT.resetGUIInput, false)
 
-    -- Properties & Other section buttons
-    NMT.gui.labelOther = guiCreateLabel(0.52, 0.66, 0.46, 0.06, "Properties & Other:", true, NMT.gui.tabs[1])
-    guiLabelSetVerticalAlign(NMT.gui.labelOther, "center")
-    guiSetFont(NMT.gui.labelOther, "default-bold-small")
-
-    NMT.gui.buttonApplyProperties = guiCreateButton(0.52, 0.74, 0.46, 0.08, "Apply Properties", true, NMT.gui.tabs[1])
+    NMT.gui.buttonApplyProperties = guiCreateButton(0.02, 0.82, 0.48, 0.08, "Apply Properties", true, NMT.gui.tabs[1])
     guiSetEnabled(NMT.gui.buttonApplyProperties, false)
     addEventHandler("onClientGUIClick", NMT.gui.buttonApplyProperties, NMT.setProperties, false)
 
-    NMT.gui.buttonClone = guiCreateButton(0.52, 0.85, 0.46, 0.08, labels["performClone"], true, NMT.gui.tabs[1])
+    NMT.gui.buttonClone = guiCreateButton(0.52, 0.82, 0.46, 0.08, labels["performClone"], true, NMT.gui.tabs[1])
     guiSetEnabled(NMT.gui.buttonClone, false)
     addEventHandler("onClientGUIClick", NMT.gui.buttonClone, NMT.clone, false)
 
     -- Tab 2: Continuous duplication
     NMT.gui.tabs[2] = guiCreateTab("Duplicate", NMT.gui.tabPanel)
 
-    -- Position inputs
-    NMT.gui.labelAddMoveX = guiCreateLabel(0.02, 0.02, 0.3, 0.08, "position (x):", true, NMT.gui.tabs[2])
-    guiLabelSetHorizontalAlign(NMT.gui.labelAddMoveX, "center")
+    -- Position section
+    NMT.gui.labelDupPosHeader = guiCreateLabel(0.02, 0.01, 0.96, 0.05, "Position Offset", true, NMT.gui.tabs[2])
+    guiSetFont(NMT.gui.labelDupPosHeader, "default-bold-small")
+    guiLabelSetHorizontalAlign(NMT.gui.labelDupPosHeader, "center")
+
+    NMT.gui.labelAddMoveX = guiCreateLabel(0.02, 0.07, 0.3, 0.06, "X:", true, NMT.gui.tabs[2])
     guiLabelSetVerticalAlign(NMT.gui.labelAddMoveX, "center")
-    NMT.gui.editAddMoveX = guiCreateEdit(0.02, 0.1, 0.3, 0.08, "0", true, NMT.gui.tabs[2])
+    NMT.gui.editAddMoveX = guiCreateEdit(0.02, 0.13, 0.3, 0.07, "0", true, NMT.gui.tabs[2])
 
-    NMT.gui.labelAddMoveY = guiCreateLabel(0.35, 0.02, 0.3, 0.08, "position (y):", true, NMT.gui.tabs[2])
-    guiLabelSetHorizontalAlign(NMT.gui.labelAddMoveY, "center")
+    NMT.gui.labelAddMoveY = guiCreateLabel(0.35, 0.07, 0.3, 0.06, "Y:", true, NMT.gui.tabs[2])
     guiLabelSetVerticalAlign(NMT.gui.labelAddMoveY, "center")
-    NMT.gui.editAddMoveY = guiCreateEdit(0.35, 0.1, 0.3, 0.08, "0", true, NMT.gui.tabs[2])
+    NMT.gui.editAddMoveY = guiCreateEdit(0.35, 0.13, 0.3, 0.07, "0", true, NMT.gui.tabs[2])
 
-    NMT.gui.labelAddMoveZ = guiCreateLabel(0.68, 0.02, 0.3, 0.08, "position (z):", true, NMT.gui.tabs[2])
-    guiLabelSetHorizontalAlign(NMT.gui.labelAddMoveZ, "center")
+    NMT.gui.labelAddMoveZ = guiCreateLabel(0.68, 0.07, 0.3, 0.06, "Z:", true, NMT.gui.tabs[2])
     guiLabelSetVerticalAlign(NMT.gui.labelAddMoveZ, "center")
-    NMT.gui.editAddMoveZ = guiCreateEdit(0.68, 0.1, 0.3, 0.08, "0", true, NMT.gui.tabs[2])
+    NMT.gui.editAddMoveZ = guiCreateEdit(0.68, 0.13, 0.3, 0.07, "0", true, NMT.gui.tabs[2])
 
-    -- Rotation inputs
-    NMT.gui.labelAddRotateX = guiCreateLabel(0.02, 0.19, 0.3, 0.08, "rotation (x):", true, NMT.gui.tabs[2])
-    guiLabelSetHorizontalAlign(NMT.gui.labelAddRotateX, "center")
+    -- Rotation section
+    NMT.gui.labelDupRotHeader = guiCreateLabel(0.02, 0.22, 0.96, 0.05, "Rotation Offset", true, NMT.gui.tabs[2])
+    guiSetFont(NMT.gui.labelDupRotHeader, "default-bold-small")
+    guiLabelSetHorizontalAlign(NMT.gui.labelDupRotHeader, "center")
+
+    NMT.gui.labelAddRotateX = guiCreateLabel(0.02, 0.28, 0.3, 0.06, "X:", true, NMT.gui.tabs[2])
     guiLabelSetVerticalAlign(NMT.gui.labelAddRotateX, "center")
-    NMT.gui.editAddRotateX = guiCreateEdit(0.02, 0.27, 0.3, 0.08, "0", true, NMT.gui.tabs[2])
+    NMT.gui.editAddRotateX = guiCreateEdit(0.02, 0.34, 0.3, 0.07, "0", true, NMT.gui.tabs[2])
 
-    NMT.gui.labelAddRotateY = guiCreateLabel(0.35, 0.19, 0.3, 0.08, "rotation (y):", true, NMT.gui.tabs[2])
-    guiLabelSetHorizontalAlign(NMT.gui.labelAddRotateY, "center")
+    NMT.gui.labelAddRotateY = guiCreateLabel(0.35, 0.28, 0.3, 0.06, "Y:", true, NMT.gui.tabs[2])
     guiLabelSetVerticalAlign(NMT.gui.labelAddRotateY, "center")
-    NMT.gui.editAddRotateY = guiCreateEdit(0.35, 0.27, 0.3, 0.08, "0", true, NMT.gui.tabs[2])
+    NMT.gui.editAddRotateY = guiCreateEdit(0.35, 0.34, 0.3, 0.07, "0", true, NMT.gui.tabs[2])
 
-    NMT.gui.labelAddRotateZ = guiCreateLabel(0.68, 0.19, 0.3, 0.08, "rotation (z):", true, NMT.gui.tabs[2])
-    guiLabelSetHorizontalAlign(NMT.gui.labelAddRotateZ, "center")
+    NMT.gui.labelAddRotateZ = guiCreateLabel(0.68, 0.28, 0.3, 0.06, "Z:", true, NMT.gui.tabs[2])
     guiLabelSetVerticalAlign(NMT.gui.labelAddRotateZ, "center")
-    NMT.gui.editAddRotateZ = guiCreateEdit(0.68, 0.27, 0.3, 0.08, "0", true, NMT.gui.tabs[2])
+    NMT.gui.editAddRotateZ = guiCreateEdit(0.68, 0.34, 0.3, 0.07, "0", true, NMT.gui.tabs[2])
 
-    -- Multiplier input
-    NMT.gui.labelMultiplier = guiCreateLabel(0.02, 0.36, 0.3, 0.08, "object count:", true, NMT.gui.tabs[2])
-    guiLabelSetHorizontalAlign(NMT.gui.labelMultiplier, "center")
+    -- Multiplier
+    NMT.gui.labelMultiplier = guiCreateLabel(0.02, 0.43, 0.4, 0.06, "Object Count:", true, NMT.gui.tabs[2])
     guiLabelSetVerticalAlign(NMT.gui.labelMultiplier, "center")
-    NMT.gui.editMultiplier = guiCreateEdit(0.02, 0.44, 0.3, 0.08, "5", true, NMT.gui.tabs[2])
+    NMT.gui.editMultiplier = guiCreateEdit(0.44, 0.43, 0.54, 0.07, "5", true, NMT.gui.tabs[2])
 
-    -- Submits
-    NMT.gui.buttonGenerate = guiCreateButton(0.02, 0.74, 0.96, 0.1, labels["performGenerate"], true, NMT.gui.tabs[2])
+    -- Buttons
+    NMT.gui.buttonGenerate = guiCreateButton(0.02, 0.73, 0.96, 0.09, labels["performGenerate"], true, NMT.gui.tabs[2])
     addEventHandler("onClientGUIClick", NMT.gui.buttonGenerate, NMT.generateDuplicates, false)
+    guiSetEnabled(NMT.gui.buttonGenerate, false)
 
-    NMT.gui.buttonDuplicateUndo = guiCreateButton(0.02, 0.85, 0.96, 0.1, "Undo last", true, NMT.gui.tabs[2])
+    NMT.gui.buttonDuplicateUndo = guiCreateButton(0.02, 0.84, 0.96, 0.09, "Undo Last", true, NMT.gui.tabs[2])
     addEventHandler("onClientGUIClick", NMT.gui.buttonDuplicateUndo, function()
         local duplicateElementList = _G.duplicateElementList or {}
         local index = #duplicateElementList
@@ -172,31 +176,30 @@ local function createGUI()
         end
         triggerServerEvent("nmt:destroyElements", localPlayer, duplicateElementList[index])
         table.remove(duplicateElementList, index)
-        outputChatBox("NMT: Undone last Continuous duplication", 0, 255, 0)
+        outputChatBox("NMT: Undone last duplication", 0, 255, 0)
     end, false)
 
     -- Tab 3: Between
     NMT.gui.tabs[3] = guiCreateTab("Between", NMT.gui.tabPanel)
 
-    NMT.gui.labelBetweenInfo = guiCreateLabel(0.02, 0.05, 0.96, 0.15, "Use Q key to select 2+ elements.\nObjects will be connected in selection order\nto form outer edges, when it works at least.\nDon't go above 4 objects for now.", true, NMT.gui.tabs[3])
+    NMT.gui.labelBetweenInfo = guiCreateLabel(0.02, 0.02, 0.96, 0.16, "Select 2+ elements with Q.\nObjects connect in selection order.\nLimit: 4 objects recommended.", true, NMT.gui.tabs[3])
     guiLabelSetHorizontalAlign(NMT.gui.labelBetweenInfo, "center")
     guiLabelSetVerticalAlign(NMT.gui.labelBetweenInfo, "center")
 
-    NMT.gui.labelBetweenAmount = guiCreateLabel(0.02, 0.22, 0.3, 0.08, "Amount:", true, NMT.gui.tabs[3])
-    guiLabelSetHorizontalAlign(NMT.gui.labelBetweenAmount, "center")
+    NMT.gui.labelBetweenAmount = guiCreateLabel(0.02, 0.20, 0.3, 0.07, "Amount:", true, NMT.gui.tabs[3])
     guiLabelSetVerticalAlign(NMT.gui.labelBetweenAmount, "center")
-    NMT.gui.editBetweenAmount = guiCreateEdit(0.35, 0.22, 0.63, 0.08, "5", true, NMT.gui.tabs[3])
+    NMT.gui.editBetweenAmount = guiCreateEdit(0.35, 0.20, 0.63, 0.08, "5", true, NMT.gui.tabs[3])
 
-    NMT.gui.buttonBetweenPreview = guiCreateButton(0.02, 0.63, 0.47, 0.1, "Preview", true, NMT.gui.tabs[3])
+    NMT.gui.buttonBetweenPreview = guiCreateButton(0.02, 0.62, 0.48, 0.09, "Preview", true, NMT.gui.tabs[3])
     addEventHandler("onClientGUIClick", NMT.gui.buttonBetweenPreview, NMT.previewBetween, false)
 
-    NMT.gui.buttonBetweenClear = guiCreateButton(0.51, 0.63, 0.47, 0.1, "Clear preview", true, NMT.gui.tabs[3])
+    NMT.gui.buttonBetweenClear = guiCreateButton(0.52, 0.62, 0.46, 0.09, "Clear Preview", true, NMT.gui.tabs[3])
     addEventHandler("onClientGUIClick", NMT.gui.buttonBetweenClear, NMT.clearBetweenPreview, false)
 
-    NMT.gui.buttonBetweenGenerate = guiCreateButton(0.02, 0.74, 0.96, 0.1, "Generate", true, NMT.gui.tabs[3])
+    NMT.gui.buttonBetweenGenerate = guiCreateButton(0.02, 0.73, 0.96, 0.09, "Generate", true, NMT.gui.tabs[3])
     addEventHandler("onClientGUIClick", NMT.gui.buttonBetweenGenerate, NMT.generateBetween, false)
 
-    NMT.gui.buttonBetweenUndo = guiCreateButton(0.02, 0.85, 0.96, 0.1, "Undo last", true, NMT.gui.tabs[3])
+    NMT.gui.buttonBetweenUndo = guiCreateButton(0.02, 0.84, 0.96, 0.09, "Undo Last", true, NMT.gui.tabs[3])
     addEventHandler("onClientGUIClick", NMT.gui.buttonBetweenUndo, function()
         local betweenElementList = _G.betweenElementList or {}
         local index = #betweenElementList
@@ -210,123 +213,115 @@ local function createGUI()
     end, false)
 
     -- Tab 4: AutoShade
-    NMT.gui.tabs[4] = guiCreateTab("AutoShade+", NMT.gui.tabPanel)
+    NMT.gui.tabs[4] = guiCreateTab("Shade+", NMT.gui.tabPanel)
 
-    NMT.gui.labelAutoShadeInfo = guiCreateLabel(0.02, 0.02, 0.96, 0.08, "Select an element and configure sides:", true, NMT.gui.tabs[4])
+    NMT.gui.labelAutoShadeInfo = guiCreateLabel(0.02, 0.01, 0.96, 0.06, "Select element and configure sides:", true, NMT.gui.tabs[4])
     guiLabelSetVerticalAlign(NMT.gui.labelAutoShadeInfo, "center")
+    guiSetFont(NMT.gui.labelAutoShadeInfo, "default-bold-small")
 
-    -- AutoShade layout
+    -- Layout
     local c1, c2 = 0.02, 0.52
-    local rowH, gap, baseY = 0.07, 0.02, 0.12
+    local rowH, gap, baseY = 0.07, 0.015, 0.09
     local function ry(i) return baseY + (i-1)*(rowH+gap) end
 
-    -- Row 1: Left | Right
-    NMT.gui.checkboxShadeLeft   = guiCreateCheckBox(c1, ry(1), 0.48, rowH, "Left", false, true, NMT.gui.tabs[4])
-    NMT.gui.checkboxShadeRight  = guiCreateCheckBox(c2, ry(1), 0.46, rowH, "Right", false, true, NMT.gui.tabs[4])
-
-    -- Row 2: Bottom
+    -- Sides
+    NMT.gui.checkboxShadeLeft = guiCreateCheckBox(c1, ry(1), 0.48, rowH, "Left", false, true, NMT.gui.tabs[4])
+    NMT.gui.checkboxShadeRight = guiCreateCheckBox(c2, ry(1), 0.46, rowH, "Right", false, true, NMT.gui.tabs[4])
     NMT.gui.checkboxShadeBottom = guiCreateCheckBox(c1, ry(2), 0.48, rowH, "Bottom", false, true, NMT.gui.tabs[4])
 
-    -- Row 3: Front dropdown
+    -- Dropdowns
     local row3Y = ry(3)
-    NMT.gui.labelShadeFront = guiCreateLabel(c1, row3Y, 0.20, rowH, "Front:", true, NMT.gui.tabs[4])
+    NMT.gui.labelShadeFront = guiCreateLabel(c1, row3Y, 0.18, rowH, "Front:", true, NMT.gui.tabs[4])
     guiLabelSetVerticalAlign(NMT.gui.labelShadeFront, "center")
-    NMT.gui.comboShadeFront = guiCreateComboBox(c1 + 0.22, row3Y, 0.76, 0.20, "None", true, NMT.gui.tabs[4])
+    NMT.gui.comboShadeFront = guiCreateComboBox(c1 + 0.20, row3Y, 0.78, 0.20, "None", true, NMT.gui.tabs[4])
     guiComboBoxAddItem(NMT.gui.comboShadeFront, "None")
     for _, obj in ipairs(NMT.autoShadeObjects.front) do
         guiComboBoxAddItem(NMT.gui.comboShadeFront, obj.name)
     end
     guiComboBoxSetSelected(NMT.gui.comboShadeFront, 0)
 
-    -- Row 4: Back dropdown
     local row4Y = ry(4)
-    NMT.gui.labelShadeBack = guiCreateLabel(c1, row4Y, 0.20, rowH, "Back:", true, NMT.gui.tabs[4])
+    NMT.gui.labelShadeBack = guiCreateLabel(c1, row4Y, 0.18, rowH, "Back:", true, NMT.gui.tabs[4])
     guiLabelSetVerticalAlign(NMT.gui.labelShadeBack, "center")
-    NMT.gui.comboShadeBack = guiCreateComboBox(c1 + 0.22, row4Y, 0.76, 0.20, "None", true, NMT.gui.tabs[4])
+    NMT.gui.comboShadeBack = guiCreateComboBox(c1 + 0.20, row4Y, 0.78, 0.20, "None", true, NMT.gui.tabs[4])
     guiComboBoxAddItem(NMT.gui.comboShadeBack, "None")
     for _, obj in ipairs(NMT.autoShadeObjects.back) do
         guiComboBoxAddItem(NMT.gui.comboShadeBack, obj.name)
     end
     guiComboBoxSetSelected(NMT.gui.comboShadeBack, 0)
 
-    -- Row 5: Shade type label
-    NMT.gui.labelShadeType = guiCreateLabel(c1, ry(5), 0.94, rowH, "Shade type:", true, NMT.gui.tabs[4])
+    -- Type
+    NMT.gui.labelShadeType = guiCreateLabel(c1, ry(5), 0.96, rowH, "Shade Type:", true, NMT.gui.tabs[4])
     guiLabelSetVerticalAlign(NMT.gui.labelShadeType, "center")
     guiSetFont(NMT.gui.labelShadeType, "default-bold-small")
 
-    -- Row 6: Radios (Lighter / Darker)
     NMT.gui.radioShadeLighter = guiCreateRadioButton(c1, ry(6), 0.48, rowH, "Lighter (3458)", true, NMT.gui.tabs[4])
     guiRadioButtonSetSelected(NMT.gui.radioShadeLighter, true)
-    NMT.gui.radioShadeDarker  = guiCreateRadioButton(c2, ry(6), 0.46, rowH, "Darker (8558)", true, NMT.gui.tabs[4])
+    NMT.gui.radioShadeDarker = guiCreateRadioButton(c2, ry(6), 0.46, rowH, "Darker (8558)", true, NMT.gui.tabs[4])
 
-    -- Apply button below grid
-    local applyY = 0.74
-    NMT.gui.buttonShadeApply = guiCreateButton(0.02, applyY, 0.96, 0.1, "Apply", true, NMT.gui.tabs[4])
+    -- Buttons
+    NMT.gui.buttonShadeApply = guiCreateButton(0.02, 0.73, 0.96, 0.09, "Apply", true, NMT.gui.tabs[4])
     addEventHandler("onClientGUIClick", NMT.gui.buttonShadeApply, NMT.applyAutoShade, false)
-    
-    -- Undo button
-    NMT.gui.buttonAutoShadeUndo = guiCreateButton(0.02, 0.85, 0.96, 0.1, "Undo last", true, NMT.gui.tabs[4])
+
+    NMT.gui.buttonAutoShadeUndo = guiCreateButton(0.02, 0.84, 0.96, 0.09, "Undo Last", true, NMT.gui.tabs[4])
     addEventHandler("onClientGUIClick", NMT.gui.buttonAutoShadeUndo, function()
         triggerServerEvent("nmt:autoShadeUndo", localPlayer)
     end, false)
 
-    -- Mirror+ tab (Multi-axis mirroring)
+    -- Tab 5: Mirror+
     NMT.gui.tabs[5] = guiCreateTab("Mirror+", NMT.gui.tabPanel)
 
-    -- Main element selection
-    NMT.gui.labelMirrorPlusMainElement = guiCreateLabel(0.02, 0.05, 0.48, 0.06, "Main element: not selected", true, NMT.gui.tabs[5])
+    NMT.gui.labelMirrorPlusMainElement = guiCreateLabel(0.02, 0.02, 0.96, 0.05, "Main element: not selected", true, NMT.gui.tabs[5])
     guiLabelSetVerticalAlign(NMT.gui.labelMirrorPlusMainElement, "center")
-    NMT.gui.buttonSelectMirrorPlusMainElement = guiCreateButton(0.52, 0.05, 0.46, 0.06, "Select main element", true, NMT.gui.tabs[5])
+    guiSetFont(NMT.gui.labelMirrorPlusMainElement, "default-bold-small")
+    
+    NMT.gui.buttonSelectMirrorPlusMainElement = guiCreateButton(0.02, 0.08, 0.96, 0.07, "Select Main Element", true, NMT.gui.tabs[5])
     addEventHandler("onClientGUIClick", NMT.gui.buttonSelectMirrorPlusMainElement, function()
         if NMT.mirrorMainElement and isElement(NMT.mirrorMainElement) then
             NMT.setMirrorMainElement(0)
             return
         end
-
         NMT.processingMirrorMainElementSelect = true
         guiSetText(NMT.gui.buttonSelectMirrorPlusMainElement, "Select an element...")
     end, false)
 
-    -- Info text
-    NMT.gui.labelMirrorPlusInfo = guiCreateLabel(0.02, 0.13, 0.96, 0.08, "Select multiple axes for position and rotation mirroring", true, NMT.gui.tabs[5])
+    NMT.gui.labelMirrorPlusInfo = guiCreateLabel(0.02, 0.17, 0.96, 0.06, "Select axes for position and rotation mirroring", true, NMT.gui.tabs[5])
     guiLabelSetHorizontalAlign(NMT.gui.labelMirrorPlusInfo, "center")
     guiLabelSetVerticalAlign(NMT.gui.labelMirrorPlusInfo, "center")
 
-    -- Position mirroring checkboxes
-    NMT.gui.labelMirrorPlusPosition = guiCreateLabel(0.02, 0.23, 0.96, 0.06, "Mirror Position:", true, NMT.gui.tabs[5])
+    -- Position mirroring
+    NMT.gui.labelMirrorPlusPosition = guiCreateLabel(0.02, 0.25, 0.96, 0.05, "Mirror Position:", true, NMT.gui.tabs[5])
     guiSetFont(NMT.gui.labelMirrorPlusPosition, "default-bold-small")
-    
-    NMT.gui.checkMirrorPosXPlus = guiCreateCheckBox(0.05, 0.30, 0.28, 0.05, "X+ (Right)", false, true, NMT.gui.tabs[5])
-    NMT.gui.checkMirrorPosXMinus = guiCreateCheckBox(0.37, 0.30, 0.28, 0.05, "X- (Left)", false, true, NMT.gui.tabs[5])
-    NMT.gui.checkMirrorPosYPlus = guiCreateCheckBox(0.69, 0.30, 0.28, 0.05, "Y+ (Forward)", false, true, NMT.gui.tabs[5])
-    
-    NMT.gui.checkMirrorPosYMinus = guiCreateCheckBox(0.05, 0.36, 0.28, 0.05, "Y- (Backward)", false, true, NMT.gui.tabs[5])
-    NMT.gui.checkMirrorPosZPlus = guiCreateCheckBox(0.37, 0.36, 0.28, 0.05, "Z+ (Up)", false, true, NMT.gui.tabs[5])
-    NMT.gui.checkMirrorPosZMinus = guiCreateCheckBox(0.69, 0.36, 0.28, 0.05, "Z- (Down)", false, true, NMT.gui.tabs[5])
 
-    -- Rotation mirroring checkboxes
-    NMT.gui.labelMirrorPlusRotation = guiCreateLabel(0.02, 0.44, 0.96, 0.06, "Mirror Rotation:", true, NMT.gui.tabs[5])
+    NMT.gui.checkMirrorPosXPlus = guiCreateCheckBox(0.05, 0.31, 0.28, 0.05, "X+", false, true, NMT.gui.tabs[5])
+    NMT.gui.checkMirrorPosXMinus = guiCreateCheckBox(0.37, 0.31, 0.28, 0.05, "X-", false, true, NMT.gui.tabs[5])
+    NMT.gui.checkMirrorPosYPlus = guiCreateCheckBox(0.69, 0.31, 0.28, 0.05, "Y+", false, true, NMT.gui.tabs[5])
+    NMT.gui.checkMirrorPosYMinus = guiCreateCheckBox(0.05, 0.37, 0.28, 0.05, "Y-", false, true, NMT.gui.tabs[5])
+    NMT.gui.checkMirrorPosZPlus = guiCreateCheckBox(0.37, 0.37, 0.28, 0.05, "Z+", false, true, NMT.gui.tabs[5])
+    NMT.gui.checkMirrorPosZMinus = guiCreateCheckBox(0.69, 0.37, 0.28, 0.05, "Z-", false, true, NMT.gui.tabs[5])
+
+    -- Rotation mirroring
+    NMT.gui.labelMirrorPlusRotation = guiCreateLabel(0.02, 0.44, 0.96, 0.05, "Mirror Rotation:", true, NMT.gui.tabs[5])
     guiSetFont(NMT.gui.labelMirrorPlusRotation, "default-bold-small")
-    
-    NMT.gui.checkMirrorRotXPlus = guiCreateCheckBox(0.05, 0.51, 0.28, 0.05, "X+ (Right)", false, true, NMT.gui.tabs[5])
-    NMT.gui.checkMirrorRotXMinus = guiCreateCheckBox(0.37, 0.51, 0.28, 0.05, "X- (Left)", false, true, NMT.gui.tabs[5])
-    NMT.gui.checkMirrorRotYPlus = guiCreateCheckBox(0.69, 0.51, 0.28, 0.05, "Y+ (Forward)", false, true, NMT.gui.tabs[5])
-    
-    NMT.gui.checkMirrorRotYMinus = guiCreateCheckBox(0.05, 0.57, 0.28, 0.05, "Y- (Backward)", false, true, NMT.gui.tabs[5])
-    NMT.gui.checkMirrorRotZPlus = guiCreateCheckBox(0.37, 0.57, 0.28, 0.05, "Z+ (Up)", false, true, NMT.gui.tabs[5])
-    NMT.gui.checkMirrorRotZMinus = guiCreateCheckBox(0.69, 0.57, 0.28, 0.05, "Z- (Down)", false, true, NMT.gui.tabs[5])
+
+    NMT.gui.checkMirrorRotXPlus = guiCreateCheckBox(0.05, 0.50, 0.28, 0.05, "X+", false, true, NMT.gui.tabs[5])
+    NMT.gui.checkMirrorRotXMinus = guiCreateCheckBox(0.37, 0.50, 0.28, 0.05, "X-", false, true, NMT.gui.tabs[5])
+    NMT.gui.checkMirrorRotYPlus = guiCreateCheckBox(0.69, 0.50, 0.28, 0.05, "Y+", false, true, NMT.gui.tabs[5])
+    NMT.gui.checkMirrorRotYMinus = guiCreateCheckBox(0.05, 0.56, 0.28, 0.05, "Y-", false, true, NMT.gui.tabs[5])
+    NMT.gui.checkMirrorRotZPlus = guiCreateCheckBox(0.37, 0.56, 0.28, 0.05, "Z+", false, true, NMT.gui.tabs[5])
+    NMT.gui.checkMirrorRotZMinus = guiCreateCheckBox(0.69, 0.56, 0.28, 0.05, "Z-", false, true, NMT.gui.tabs[5])
 
     -- Buttons
-    NMT.gui.buttonMirrorPlusPreview = guiCreateButton(0.02, 0.63, 0.47, 0.1, "Preview", true, NMT.gui.tabs[5])
+    NMT.gui.buttonMirrorPlusPreview = guiCreateButton(0.02, 0.64, 0.48, 0.08, "Preview", true, NMT.gui.tabs[5])
     addEventHandler("onClientGUIClick", NMT.gui.buttonMirrorPlusPreview, NMT.previewMirrorPlus, false)
 
-    NMT.gui.buttonMirrorPlusClear = guiCreateButton(0.51, 0.63, 0.47, 0.1, "Clear preview", true, NMT.gui.tabs[5])
+    NMT.gui.buttonMirrorPlusClear = guiCreateButton(0.52, 0.64, 0.46, 0.08, "Clear Preview", true, NMT.gui.tabs[5])
     addEventHandler("onClientGUIClick", NMT.gui.buttonMirrorPlusClear, NMT.clearMirrorPreview, false)
 
-    NMT.gui.buttonMirrorPlusGenerate = guiCreateButton(0.02, 0.74, 0.96, 0.1, "Generate", true, NMT.gui.tabs[5])
+    NMT.gui.buttonMirrorPlusGenerate = guiCreateButton(0.02, 0.73, 0.96, 0.09, "Generate", true, NMT.gui.tabs[5])
     addEventHandler("onClientGUIClick", NMT.gui.buttonMirrorPlusGenerate, NMT.generateMirrorPlus, false)
 
-    NMT.gui.buttonMirrorPlusUndo = guiCreateButton(0.02, 0.85, 0.96, 0.1, "Undo last", true, NMT.gui.tabs[5])
+    NMT.gui.buttonMirrorPlusUndo = guiCreateButton(0.02, 0.84, 0.96, 0.09, "Undo Last", true, NMT.gui.tabs[5])
     addEventHandler("onClientGUIClick", NMT.gui.buttonMirrorPlusUndo, function()
         local mirrorElementList = _G.mirrorElementList or {}
         local index = #mirrorElementList
@@ -338,107 +333,68 @@ local function createGUI()
         table.remove(mirrorElementList, index)
         outputChatBox("NMT: Undone last Mirror+ generation", 0, 255, 0)
     end, false)
-    
+
     -- Tab 6: Settings
     NMT.gui.tabs[6] = guiCreateTab("Settings", NMT.gui.tabPanel)
-    
-    -- Settings header
-    NMT.gui.labelSettingsInfo = guiCreateLabel(0.02, 0.02, 0.96, 0.06, "Configure NMT behavior and keybinds", true, NMT.gui.tabs[6])
+
+    NMT.gui.labelSettingsInfo = guiCreateLabel(0.02, 0.01, 0.96, 0.05, "Configure NMT Behavior & Keybinds", true, NMT.gui.tabs[6])
     guiLabelSetHorizontalAlign(NMT.gui.labelSettingsInfo, "center")
-    guiLabelSetVerticalAlign(NMT.gui.labelSettingsInfo, "center")
     guiSetFont(NMT.gui.labelSettingsInfo, "default-bold-small")
-    
-    -- Key Binds section
-    local yPos = 0.10
-    NMT.gui.labelKeyBinds = guiCreateLabel(0.02, yPos, 0.96, 0.05, "Key Binds:", true, NMT.gui.tabs[6])
+
+    -- Key Binds
+    local yPos = 0.08
+    NMT.gui.labelKeyBinds = guiCreateLabel(0.02, yPos, 0.96, 0.04, "Key Binds:", true, NMT.gui.tabs[6])
     guiSetFont(NMT.gui.labelKeyBinds, "default-bold-small")
-    
-    yPos = yPos + 0.06
-    NMT.gui.labelSelectKey = guiCreateLabel(0.02, yPos, 0.40, 0.05, "Select element key:", true, NMT.gui.tabs[6])
+
+    yPos = yPos + 0.05
+    NMT.gui.labelSelectKey = guiCreateLabel(0.02, yPos, 0.38, 0.045, "Select element key:", true, NMT.gui.tabs[6])
     guiLabelSetVerticalAlign(NMT.gui.labelSelectKey, "center")
-    NMT.gui.editSelectKey = guiCreateEdit(0.44, yPos, 0.20, 0.05, NMT.settings.keyBindSelect, true, NMT.gui.tabs[6])
+    NMT.gui.editSelectKey = guiCreateEdit(0.42, yPos, 0.18, 0.045, NMT.settings.keyBindSelect, true, NMT.gui.tabs[6])
     guiEditSetMaxLength(NMT.gui.editSelectKey, 1)
-    addEventHandler("onClientGUIChanged", NMT.gui.editSelectKey, function()
-        local text = guiGetText(source)
-        if #text > 1 then
-            guiSetText(source, string.sub(text, -1))
-        end
-    end, false)
-    
-    yPos = yPos + 0.06
-    NMT.gui.labelToggleGUIKey = guiCreateLabel(0.02, yPos, 0.40, 0.05, "Toggle GUI key:", true, NMT.gui.tabs[6])
+
+    yPos = yPos + 0.055
+    NMT.gui.labelToggleGUIKey = guiCreateLabel(0.02, yPos, 0.38, 0.045, "Toggle GUI key:", true, NMT.gui.tabs[6])
     guiLabelSetVerticalAlign(NMT.gui.labelToggleGUIKey, "center")
-    NMT.gui.editToggleGUIKey = guiCreateEdit(0.44, yPos, 0.20, 0.05, NMT.settings.keyBindToggleGUI, true, NMT.gui.tabs[6])
+    NMT.gui.editToggleGUIKey = guiCreateEdit(0.42, yPos, 0.18, 0.045, NMT.settings.keyBindToggleGUI, true, NMT.gui.tabs[6])
     guiEditSetMaxLength(NMT.gui.editToggleGUIKey, 1)
-    addEventHandler("onClientGUIChanged", NMT.gui.editToggleGUIKey, function()
-        local text = guiGetText(source)
-        if #text > 1 then
-            guiSetText(source, string.sub(text, -1))
-        end
-    end, false)
-    
-    -- Selection Mode section
-    yPos = yPos + 0.08
-    NMT.gui.labelSelectionMode = guiCreateLabel(0.02, yPos, 0.96, 0.05, "Selection Mode:", true, NMT.gui.tabs[6])
+
+    -- Selection Mode
+    yPos = yPos + 0.07
+    NMT.gui.labelSelectionMode = guiCreateLabel(0.02, yPos, 0.96, 0.04, "Selection Mode:", true, NMT.gui.tabs[6])
     guiSetFont(NMT.gui.labelSelectionMode, "default-bold-small")
-    
-    yPos = yPos + 0.06
-    -- Create container for Selection Mode radio group (visible)
-    NMT.gui.selectionModeContainer = guiCreateLabel(0.02, yPos, 0.96, 0.11, "", true, NMT.gui.tabs[6])
-    guiLabelSetColor(NMT.gui.selectionModeContainer, 0, 0, 0, 0) -- Transparent
-    
-    NMT.gui.radioSelectionPerObject = guiCreateRadioButton(0, 0, 1, 0.45, "Per-object: Press key for each object", true, NMT.gui.selectionModeContainer)
-    NMT.gui.radioSelectionToggle = guiCreateRadioButton(0, 0.55, 1, 0.45, "Toggle: Press once to start, click objects, press again to confirm", true, NMT.gui.selectionModeContainer)
-    
-    yPos = yPos + 0.11
-    
-    -- Set default selection mode
+
+    yPos = yPos + 0.05
+    NMT.gui.selectionModeContainer = guiCreateLabel(0.02, yPos, 0.96, 0.10, "", true, NMT.gui.tabs[6])
+    guiLabelSetColor(NMT.gui.selectionModeContainer, 0, 0, 0, 0)
+
+    NMT.gui.radioSelectionPerObject = guiCreateRadioButton(0, 0, 1, 0.48, "Per-object (press key each time)", true, NMT.gui.selectionModeContainer)
+    NMT.gui.radioSelectionToggle = guiCreateRadioButton(0, 0.52, 1, 0.48, "Toggle (press, click objects, press again)", true, NMT.gui.selectionModeContainer)
+
     if NMT.settings.selectionMode == "toggle" then
         guiRadioButtonSetSelected(NMT.gui.radioSelectionToggle, true)
     else
         guiRadioButtonSetSelected(NMT.gui.radioSelectionPerObject, true)
     end
-    
-    -- AutoShade Mode section
-    yPos = yPos + 0.03
-    NMT.gui.labelAutoShadeMode = guiCreateLabel(0.02, yPos, 0.96, 0.05, "AutoShade Behavior (doesn't work yet, applies to all selected.):", true, NMT.gui.tabs[6])
-    guiSetFont(NMT.gui.labelAutoShadeMode, "default-bold-small")
-    
-    yPos = yPos + 0.06
-    -- Create container for AutoShade Mode radio group (visible)
-    NMT.gui.autoShadeModeContainer = guiCreateLabel(0.02, yPos, 0.96, 0.11, "", true, NMT.gui.tabs[6])
-    guiLabelSetColor(NMT.gui.autoShadeModeContainer, 0, 0, 0, 0) -- Transparent
-    
-    NMT.gui.radioAutoShadeSingle = guiCreateRadioButton(0, 0, 1, 0.45, "Apply to currently selected element only", true, NMT.gui.autoShadeModeContainer)
-    NMT.gui.radioAutoShadeGroup = guiCreateRadioButton(0, 0.55, 1, 0.45, "Apply to all selected elements", true, NMT.gui.autoShadeModeContainer)
-    
+
     yPos = yPos + 0.11
-    
-    -- Set default autoshade mode
-    if NMT.settings.autoShadeMode == "group" then
-        guiRadioButtonSetSelected(NMT.gui.radioAutoShadeGroup, true)
-    else
-        guiRadioButtonSetSelected(NMT.gui.radioAutoShadeSingle, true)
-    end
-    
-    -- Auto-update section (info only, controlled server-side)
-    yPos = yPos + 0.08
-    NMT.gui.labelAutoUpdate = guiCreateLabel(0.02, yPos, 0.96, 0.05, "Auto-updater:", true, NMT.gui.tabs[6])
+
+    -- Auto-update info
+    yPos = yPos + 0.03
+    NMT.gui.labelAutoUpdate = guiCreateLabel(0.02, yPos, 0.96, 0.04, "Auto-updater:", true, NMT.gui.tabs[6])
     guiSetFont(NMT.gui.labelAutoUpdate, "default-bold-small")
-    
-    yPos = yPos + 0.06
+
+    yPos = yPos + 0.05
     NMT.gui.labelAutoUpdateInfo = guiCreateLabel(0.02, yPos, 0.96, 0.08, "Loading...", true, NMT.gui.tabs[6])
     guiLabelSetColor(NMT.gui.labelAutoUpdateInfo, 200, 200, 200)
-    
-    -- Request auto-update status from server
+
     triggerServerEvent("nmt:requestAutoUpdateStatus", localPlayer)
-    
-    -- Apply/Save button
+
+    -- Apply/Reset buttons
     yPos = yPos + 0.10
-    NMT.gui.buttonSaveSettings = guiCreateButton(0.02, yPos, 0.47, 0.08, "Apply Settings", true, NMT.gui.tabs[6])
+    NMT.gui.buttonSaveSettings = guiCreateButton(0.02, yPos, 0.48, 0.07, "Apply Settings", true, NMT.gui.tabs[6])
     addEventHandler("onClientGUIClick", NMT.gui.buttonSaveSettings, NMT.applySettings, false)
-    
-    NMT.gui.buttonResetSettings = guiCreateButton(0.51, yPos, 0.47, 0.08, "Reset to Defaults", true, NMT.gui.tabs[6])
+
+    NMT.gui.buttonResetSettings = guiCreateButton(0.52, yPos, 0.46, 0.07, "Reset to Defaults", true, NMT.gui.tabs[6])
     addEventHandler("onClientGUIClick", NMT.gui.buttonResetSettings, NMT.resetSettings, false)
 end
 
@@ -447,10 +403,10 @@ addEvent("nmt:receiveAutoUpdateStatus", true)
 addEventHandler("nmt:receiveAutoUpdateStatus", root, function(enabled)
     if NMT.gui and NMT.gui.labelAutoUpdateInfo then
         if enabled then
-            guiSetText(NMT.gui.labelAutoUpdateInfo, "Enabled (server-side)\nAutomatically checks for updates hourly\nUse /nmtupdate to check manually")
+            guiSetText(NMT.gui.labelAutoUpdateInfo, "Enabled (checks hourly)\nUse /nmtupdate to check manually")
             guiLabelSetColor(NMT.gui.labelAutoUpdateInfo, 0, 255, 0)
         else
-            guiSetText(NMT.gui.labelAutoUpdateInfo, "Disabled (server-side)\nUse /nmtupdate to check manually")
+            guiSetText(NMT.gui.labelAutoUpdateInfo, "Disabled\nUse /nmtupdate to check manually")
             guiLabelSetColor(NMT.gui.labelAutoUpdateInfo, 255, 100, 0)
         end
     end
@@ -466,8 +422,8 @@ function NMT.toggleGUI()
     triggerEvent("nmt:onGUIToggle", localPlayer, not visible)
 end
 
--- Bind toggle key
-bindKey("u", "down", NMT.toggleGUI)
+-- Bind toggle key from settings
+bindKey(NMT.settings.keyBindToggleGUI, "down", NMT.toggleGUI)
 
 addEventHandler("onClientGUIChanged", resourceRoot, function()
     if NMT and NMT.gui and (source == NMT.gui.editSelectKey or source == NMT.gui.editToggleGUIKey) then

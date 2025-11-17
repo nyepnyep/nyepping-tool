@@ -89,67 +89,74 @@ addEventHandler("nmt:autoShade", root, function(element, sides, elemid)
         table.insert(createdElements, shade)
     end
 
-    -- Helper function to create shade from config
-    local function createShadeFromConfig(element, config, elemid, direction, shadeCountRef)
+    -- Front (using table config)
+    if sides["asFront"] then
+        local config = sides["asFront"]
         local shade = exports.edf:edfCloneElement(element)
         local elementMatrix = element.matrix
-        local positionVector = elementMatrix.transformPosition(elementMatrix, config.position)
+        local viktorVektor = Vector3(config.position.x, config.position.y, config.position.z)
+        local positionVector = elementMatrix.transformPosition(elementMatrix, viktorVektor)
         local shadeX, shadeY, shadeZ = positionVector.x, positionVector.y, positionVector.z
         local shadeRX, shadeRY, shadeRZ = getElementRotation(element)
-
-        -- Apply rotation based on config
         if config.rotation.x then
             shadeRX, shadeRY, shadeRZ = rotateX(shadeRX, shadeRY, shadeRZ, config.rotation.x)
         end
         if config.rotation.y then
-            -- Check if it's a direct offset or rotateY function
-            if config.id == "tower" then
-                shadeRY = shadeRY + config.rotation.y
-            else
-                shadeRX, shadeRY, shadeRZ = rotateY(shadeRX, shadeRY, shadeRZ, config.rotation.y)
-            end
+            shadeRX, shadeRY, shadeRZ = rotateY(shadeRX, shadeRY, shadeRZ, config.rotation.y)
         end
         if config.rotation.z then
             shadeRX, shadeRY, shadeRZ = rotateZ(shadeRX, shadeRY, shadeRZ, config.rotation.z)
         end
-
-        -- Set model
         local modelToUse = config.model or elemid
         exports.edf:edfSetElementProperty(shade, "model", modelToUse)
         exports.edf:edfSetElementPosition(shade, shadeX, shadeY, shadeZ)
         exports.edf:edfSetElementRotation(shade, shadeRX, shadeRY, shadeRZ)
-
-        -- Set other properties
         if config.scale then
             exports.edf:edfSetElementProperty(shade, "scale", config.scale)
         end
         if config.doublesided then
             exports.edf:edfSetElementProperty(shade, "doublesided", "true")
         end
-
-        -- Set ID
-        shadeCountRef[1] = shadeCountRef[1] + 1
-        local idName = config.id == "tower" and ("NMT: Tower [" .. direction .. "]") or ("NMT: Shade [" .. direction .. "]")
-        exports.edf:edfSetElementProperty(shade, "id", idName .. " (" .. shadeCountRef[1] .. ")")
-        setElementID(shade, idName .. " (" .. shadeCountRef[1] .. ")")
-
-        return shade
-    end
-
-    -- Front (using table config)
-    if sides["asFront"] then
-        local shadeCountRef = {shadeCount}
-        local shade = createShadeFromConfig(element, sides["asFront"], elemid, "Front", shadeCountRef)
-        shadeCount = shadeCountRef[1]
+        shadeCount = shadeCount + 1
+        local idName = config.id == "tower" and "NMT: Tower [Front]" or "NMT: Shade [Front]"
+        exports.edf:edfSetElementProperty(shade, "id", idName .. " (" .. shadeCount .. ")")
+        setElementID(shade, idName .. " (" .. shadeCount .. ")")
         createdCount = createdCount + 1
         table.insert(createdElements, shade)
     end
 
     -- Back (using table config)
     if sides["asBack"] then
-        local shadeCountRef = {shadeCount}
-        local shade = createShadeFromConfig(element, sides["asBack"], elemid, "Back", shadeCountRef)
-        shadeCount = shadeCountRef[1]
+        local config = sides["asBack"]
+        local shade = exports.edf:edfCloneElement(element)
+        local elementMatrix = element.matrix
+        local viktorVektor = Vector3(config.position.x, config.position.y, config.position.z)
+        local positionVector = elementMatrix.transformPosition(elementMatrix, viktorVektor)
+        local shadeX, shadeY, shadeZ = positionVector.x, positionVector.y, positionVector.z
+        local shadeRX, shadeRY, shadeRZ = getElementRotation(element)
+        if config.rotation.x then
+            shadeRX, shadeRY, shadeRZ = rotateX(shadeRX, shadeRY, shadeRZ, config.rotation.x)
+        end
+        if config.rotation.y then
+            shadeRX, shadeRY, shadeRZ = rotateY(shadeRX, shadeRY, shadeRZ, config.rotation.y)
+        end
+        if config.rotation.z then
+            shadeRX, shadeRY, shadeRZ = rotateZ(shadeRX, shadeRY, shadeRZ, config.rotation.z)
+        end
+        local modelToUse = config.model or elemid
+        exports.edf:edfSetElementProperty(shade, "model", modelToUse)
+        exports.edf:edfSetElementPosition(shade, shadeX, shadeY, shadeZ)
+        exports.edf:edfSetElementRotation(shade, shadeRX, shadeRY, shadeRZ)
+        if config.scale then
+            exports.edf:edfSetElementProperty(shade, "scale", config.scale)
+        end
+        if config.doublesided then
+            exports.edf:edfSetElementProperty(shade, "doublesided", "true")
+        end
+        shadeCount = shadeCount + 1
+        local idName = config.id == "tower" and "NMT: Tower [Back]" or "NMT: Shade [Back]"
+        exports.edf:edfSetElementProperty(shade, "id", idName .. " (" .. shadeCount .. ")")
+        setElementID(shade, idName .. " (" .. shadeCount .. ")")
         createdCount = createdCount + 1
         table.insert(createdElements, shade)
     end

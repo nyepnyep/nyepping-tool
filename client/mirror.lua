@@ -11,10 +11,8 @@ function NMT.setMirrorMainElement(element)
         end
 
         NMT.mirrorMainElement = nil
-        guiSetText(NMT.gui.labelMirrorMainElement, "Main element: not selected")
-        guiSetText(NMT.gui.buttonSelectMirrorMainElement, "Select main element")
         guiSetText(NMT.gui.labelMirrorPlusMainElement, "Main element: not selected")
-        guiSetText(NMT.gui.buttonSelectMirrorPlusMainElement, "Select main element")
+        guiSetText(NMT.gui.buttonSelectMirrorPlusMainElement, "Select Main Element")
 
         return true
     end
@@ -27,6 +25,7 @@ function NMT.setMirrorMainElement(element)
     if NMT.selectedElements and NMT.selectedElements[element] then
         NMT.removeAllShadersFromElement(element)
         NMT.selectedElements[element] = nil
+
         local labels = _G.NMT_LABELS or {}
         guiSetText(NMT.gui.labelElementsToStack,
             string.format(labels["otherElementsSelected"] or "Selected element(s): %s", NMT.countSelectedElements()))
@@ -34,33 +33,63 @@ function NMT.setMirrorMainElement(element)
 
     NMT.mirrorMainElement = element
     NMT.applySelectedShaderToElement(element, "primary")
-    guiSetText(NMT.gui.labelMirrorMainElement, string.format("Main element: %s", getElementID(element)))
-    guiSetText(NMT.gui.buttonSelectMirrorMainElement, "Reset main element")
     guiSetText(NMT.gui.labelMirrorPlusMainElement, string.format("Main element: %s", getElementID(element)))
     guiSetText(NMT.gui.buttonSelectMirrorPlusMainElement, "Reset main element")
 
     return true
 end
 
-function NMT.getMirrorDirection()
-    local selected = guiComboBoxGetSelected(NMT.gui.comboMirrorDirection)
-    if selected == -1 then
-        return nil
-    end
-    
-    local directions = {
-        [0] = {axis = "x", factor = 1},   -- X+ (Right)
-        [1] = {axis = "x", factor = -1},  -- X- (Left)
-        [2] = {axis = "y", factor = 1},   -- Y+ (Forward)
-        [3] = {axis = "y", factor = -1},  -- Y- (Backward)
-        [4] = {axis = "z", factor = 1},   -- Z+ (Up)
-        [5] = {axis = "z", factor = -1}   -- Z- (Down)
+-- Get selected mirror axes from checkboxes
+function NMT.getMirrorPlusAxes()
+    local axes = {
+        position = {},
+        rotation = {}
     }
     
-    return directions[selected]
+    -- Position axes
+    if guiCheckBoxGetSelected(NMT.gui.checkMirrorPosXPlus) then
+        table.insert(axes.position, {axis = "x", factor = 1})
+    end
+    if guiCheckBoxGetSelected(NMT.gui.checkMirrorPosXMinus) then
+        table.insert(axes.position, {axis = "x", factor = -1})
+    end
+    if guiCheckBoxGetSelected(NMT.gui.checkMirrorPosYPlus) then
+        table.insert(axes.position, {axis = "y", factor = 1})
+    end
+    if guiCheckBoxGetSelected(NMT.gui.checkMirrorPosYMinus) then
+        table.insert(axes.position, {axis = "y", factor = -1})
+    end
+    if guiCheckBoxGetSelected(NMT.gui.checkMirrorPosZPlus) then
+        table.insert(axes.position, {axis = "z", factor = 1})
+    end
+    if guiCheckBoxGetSelected(NMT.gui.checkMirrorPosZMinus) then
+        table.insert(axes.position, {axis = "z", factor = -1})
+    end
+    
+    -- Rotation axes
+    if guiCheckBoxGetSelected(NMT.gui.checkMirrorRotXPlus) then
+        table.insert(axes.rotation, {axis = "x", factor = 1})
+    end
+    if guiCheckBoxGetSelected(NMT.gui.checkMirrorRotXMinus) then
+        table.insert(axes.rotation, {axis = "x", factor = -1})
+    end
+    if guiCheckBoxGetSelected(NMT.gui.checkMirrorRotYPlus) then
+        table.insert(axes.rotation, {axis = "y", factor = 1})
+    end
+    if guiCheckBoxGetSelected(NMT.gui.checkMirrorRotYMinus) then
+        table.insert(axes.rotation, {axis = "y", factor = -1})
+    end
+    if guiCheckBoxGetSelected(NMT.gui.checkMirrorRotZPlus) then
+        table.insert(axes.rotation, {axis = "z", factor = 1})
+    end
+    if guiCheckBoxGetSelected(NMT.gui.checkMirrorRotZMinus) then
+        table.insert(axes.rotation, {axis = "z", factor = -1})
+    end
+    
+    return axes
 end
 
--- Rotation conversion functions (from AutoShade/AMT)
+-- Rotation conversion functions
 function convertRotationToMTA(rx, ry, rz)
     rx, ry, rz = math.rad(rx), math.rad(ry), math.rad(rz)
     local sinX = math.sin(rx)
@@ -93,8 +122,8 @@ function convertRotationFromMTA(rx, ry, rz)
         math.deg(math.atan2(cosZ * sinX * sinY + cosY * sinZ, cosY * cosZ - sinX * sinY * sinZ))
 end
 
-function NMT.calculateMirroredPosition(elementPos, mainPos, direction)
-    if not direction then return elementPos end
+function NMT.calculateMirroredPosition(elementPos, mainPos, axes)
+    if not axes or #axes == 0 then return elementPos end
     
     local relativePos = {
         x = elementPos.x - mainPos.x,
@@ -104,13 +133,15 @@ function NMT.calculateMirroredPosition(elementPos, mainPos, direction)
     
     local mirroredPos = {x = relativePos.x, y = relativePos.y, z = relativePos.z}
     
-    -- Use factor to determine target side (+ or -)
-    if direction.axis == "x" then
-        mirroredPos.x = math.abs(relativePos.x) * direction.factor
-    elseif direction.axis == "y" then
-        mirroredPos.y = math.abs(relativePos.y) * direction.factor
-    elseif direction.axis == "z" then
-        mirroredPos.z = math.abs(relativePos.z) * direction.factor
+    -- Apply all selected position axes
+    for _, axisData in ipairs(axes) do
+        if axisData.axis == "x" then
+            mirroredPos.x = math.abs(relativePos.x) * axisData.factor
+        elseif axisData.axis == "y" then
+            mirroredPos.y = math.abs(relativePos.y) * axisData.factor
+        elseif axisData.axis == "z" then
+            mirroredPos.z = math.abs(relativePos.z) * axisData.factor
+        end
     end
     
     return {
@@ -120,24 +151,24 @@ function NMT.calculateMirroredPosition(elementPos, mainPos, direction)
     }
 end
 
-function NMT.calculateMirroredRotation(rotation, direction)
-    if not direction then return rotation end
+function NMT.calculateMirroredRotation(rotation, axes)
+    if not axes or #axes == 0 then return rotation end
     
     -- Convert from MTA (ZXY) to standard XYZ
     local rx, ry, rz = convertRotationFromMTA(rotation.x, rotation.y, rotation.z)
     
-    if direction.axis == "x" then
-        -- Mirror across YZ plane (X axis)
-        ry = -ry          -- Flip roll
-        rz = 180 - rz     -- Reverse yaw for facing
-    elseif direction.axis == "y" then
-        -- Mirror across XZ plane (Y axis)
-        rx = -rx          -- Flip pitch
-        rz = 180 - rz     -- Reverse yaw for facing
-    elseif direction.axis == "z" then
-        -- Mirror across XY plane (Z axis)
-        rx = 180 - rx     -- Flip pitch for vertical reflection
-        ry = 180 - ry     -- Flip roll for vertical reflection
+    -- Apply all selected rotation axes
+    for _, axisData in ipairs(axes) do
+        if axisData.axis == "x" then
+            ry = -ry
+            rz = 180 - rz
+        elseif axisData.axis == "y" then
+            rx = -rx
+            rz = 180 - rz
+        elseif axisData.axis == "z" then
+            rx = 180 - rx
+            ry = 180 - ry
+        end
     end
     
     -- Convert back to MTA (ZXY)
@@ -154,12 +185,8 @@ function NMT.clearMirrorPreview()
     mirrorPreviewElements = {}
 end
 
-function NMT.updateMirrorPreview()
-    NMT.clearMirrorPreview()
-    NMT.previewMirror()
-end
-
-function NMT.previewMirror()
+-- Preview Mirror+ (new function for checkbox-based system)
+function NMT.previewMirrorPlus()
     NMT.clearMirrorPreview()
     
     if not NMT.mirrorMainElement or not isElement(NMT.mirrorMainElement) then
@@ -172,9 +199,9 @@ function NMT.previewMirror()
         return
     end
     
-    local direction = NMT.getMirrorDirection()
-    if not direction then
-        outputChatBox("NMT: Please select a mirror direction", 255, 0, 0)
+    local axes = NMT.getMirrorPlusAxes()
+    if #axes.position == 0 and #axes.rotation == 0 then
+        outputChatBox("NMT: Please select at least one position or rotation axis", 255, 0, 0)
         return
     end
     
@@ -188,8 +215,8 @@ function NMT.previewMirror()
             local x, y, z = getElementPosition(element)
             local rx, ry, rz = getElementRotation(element)
             
-            local mirroredPos = NMT.calculateMirroredPosition({x = x, y = y, z = z}, mainPos, direction)
-            local mirroredRot = NMT.calculateMirroredRotation({x = rx, y = ry, z = rz}, direction)
+            local mirroredPos = NMT.calculateMirroredPosition({x = x, y = y, z = z}, mainPos, axes.position)
+            local mirroredRot = NMT.calculateMirroredRotation({x = rx, y = ry, z = rz}, axes.rotation)
             
             local previewElement = createObject(model, mirroredPos.x, mirroredPos.y, mirroredPos.z, 
                                                mirroredRot.x, mirroredRot.y, mirroredRot.z)
@@ -204,7 +231,8 @@ function NMT.previewMirror()
     outputChatBox(string.format("NMT: Previewing %d mirrored elements", #mirrorPreviewElements), 0, 255, 0)
 end
 
-function NMT.generateMirror()
+-- Generate Mirror+ (new function for checkbox-based system)
+function NMT.generateMirrorPlus()
     if not NMT.mirrorMainElement or not isElement(NMT.mirrorMainElement) then
         outputChatBox("NMT: Please select a main element first", 255, 0, 0)
         return
@@ -215,9 +243,9 @@ function NMT.generateMirror()
         return
     end
     
-    local direction = NMT.getMirrorDirection()
-    if not direction then
-        outputChatBox("NMT: Please select a mirror direction", 255, 0, 0)
+    local axes = NMT.getMirrorPlusAxes()
+    if #axes.position == 0 and #axes.rotation == 0 then
+        outputChatBox("NMT: Please select at least one position or rotation axis", 255, 0, 0)
         return
     end
     
@@ -232,11 +260,11 @@ function NMT.generateMirror()
             local rx, ry, rz = getElementRotation(element)
             local scale = getObjectScale(element)
             
-            local mirroredPos = NMT.calculateMirroredPosition({x = x, y = y, z = z}, mainPos, direction)
-            local mirroredRot = NMT.calculateMirroredRotation({x = rx, y = ry, z = rz}, direction)
+            local mirroredPos = NMT.calculateMirroredPosition({x = x, y = y, z = z}, mainPos, axes.position)
+            local mirroredRot = NMT.calculateMirroredRotation({x = rx, y = ry, z = rz}, axes.rotation)
             
             table.insert(elementsData, {
-                source = element,           -- pass original element for EDF cloning on server
+                source = element,
                 model = model,
                 x = mirroredPos.x,
                 y = mirroredPos.y,
@@ -259,13 +287,6 @@ addEventHandler("nmt:mirrorGenerated", root, function(elements)
     mirrorElementList[index] = elements
     outputChatBox(string.format("NMT: Generated %d mirrored elements", #elements), 0, 255, 0)
 end)
-
-addEvent("nmt:sendAutoShadeData", true)
-addEventHandler("nmt:sendAutoShadeData", root, function(elements)
-    local index = #autoShadeElementList + 1
-    autoShadeElementList[index] = elements
-end)
-
 
 -- Export for use in other modules
 _G.mirrorElementList = mirrorElementList

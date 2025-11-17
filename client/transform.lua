@@ -69,14 +69,27 @@ function NMT.saveXYZ()
     NMT.resetGUIInput()
 end
 
--- Reset GUI input fields
+-- Reset GUI input fields and restore elements to original position/rotation
 function NMT.resetGUIInput()
+    -- Reset input fields
     guiSetText(NMT.gui.editMoveX, "0")
     guiSetText(NMT.gui.editMoveY, "0")
     guiSetText(NMT.gui.editMoveZ, "0")
     guiSetText(NMT.gui.editRotateX, "0")
     guiSetText(NMT.gui.editRotateY, "0")
     guiSetText(NMT.gui.editRotateZ, "0")
+    
+    -- Restore all selected elements to their original positions and rotations
+    if NMT.selectedElements then
+        for element in pairs(NMT.selectedElements) do
+            if isElement(element) then
+                NMT.restoreElementPosition(element)
+                NMT.restoreElementRotation(element)
+            end
+        end
+        
+        outputChatBox("NMT: Restored elements to original position/rotation", 0, 255, 0)
+    end
 end
 
 -- Set element properties
