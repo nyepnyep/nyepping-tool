@@ -391,9 +391,9 @@ local function createGUI()
     guiSetFont(NMT.gui.labelSelectionMode, "default-bold-small")
     
     yPos = yPos + 0.06
-    -- Create container for Selection Mode radio group
+    -- Create container for Selection Mode radio group (visible)
     NMT.gui.selectionModeContainer = guiCreateLabel(0.02, yPos, 0.96, 0.11, "", true, NMT.gui.tabs[6])
-    guiSetVisible(NMT.gui.selectionModeContainer, false)
+    guiLabelSetColor(NMT.gui.selectionModeContainer, 0, 0, 0, 0) -- Transparent
     
     NMT.gui.radioSelectionPerObject = guiCreateRadioButton(0, 0, 1, 0.45, "Per-object: Press key for each object", true, NMT.gui.selectionModeContainer)
     NMT.gui.radioSelectionToggle = guiCreateRadioButton(0, 0.55, 1, 0.45, "Toggle: Press once to start, click objects, press again to confirm", true, NMT.gui.selectionModeContainer)
@@ -413,9 +413,9 @@ local function createGUI()
     guiSetFont(NMT.gui.labelAutoShadeMode, "default-bold-small")
     
     yPos = yPos + 0.06
-    -- Create container for AutoShade Mode radio group
+    -- Create container for AutoShade Mode radio group (visible)
     NMT.gui.autoShadeModeContainer = guiCreateLabel(0.02, yPos, 0.96, 0.11, "", true, NMT.gui.tabs[6])
-    guiSetVisible(NMT.gui.autoShadeModeContainer, false)
+    guiLabelSetColor(NMT.gui.autoShadeModeContainer, 0, 0, 0, 0) -- Transparent
     
     NMT.gui.radioAutoShadeSingle = guiCreateRadioButton(0, 0, 1, 0.45, "Apply to currently selected element only", true, NMT.gui.autoShadeModeContainer)
     NMT.gui.radioAutoShadeGroup = guiCreateRadioButton(0, 0.55, 1, 0.45, "Apply to all selected elements", true, NMT.gui.autoShadeModeContainer)
