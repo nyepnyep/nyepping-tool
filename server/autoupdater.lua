@@ -1,7 +1,7 @@
 -- Auto-updater for NMT
 
 -- Auto-updater configuration
-local AUTO_UPDATE_ENABLED = true
+local AUTO_UPDATE_ENABLED = false -- Disabled due to nested directory issues with MTA file API
 local AUTO_UPDATE_INTERVAL = 3600000 -- Check every hour (in milliseconds)
 -- Raw GitHub URL for the repository where updates are hosted. (Updated to the provided repo)
 local GITHUB_REPO_URL = "https://raw.githubusercontent.com/nyepnyep/nyepping-tool/main/"
