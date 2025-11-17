@@ -1,0 +1,42 @@
+<meta>
+    <oop>true</oop>
+    <info author="Nyeps Collective" name="NMT" version="1.0.0" type="misc"/>
+    
+    <!-- Utility scripts (shared) -->
+    <script type="server" src="utils/rotation.lua" />
+    
+    <!-- Server-side scripts -->
+    <script type="server" src="server/autoupdater.lua" />
+    <script type="server" src="server/element_helpers.lua" />
+    <script type="server" src="server/element_update.lua" />
+    <script type="server" src="server/element_generation.lua" />
+    <script type="server" src="server/between.lua" />
+    <script type="server" src="server/autoshade.lua" />
+    <script type="server" src="server/mirror.lua" />
+    <script type="server" src="server/element_destroy.lua" />
+    
+    <!-- Client-side core (must load first) -->
+    <script type="client" src="client/core.lua" cache="false" />
+    
+    <!-- Client utility scripts -->
+    <script type="client" src="utils/rotation.lua" cache="false" />
+    <script type="client" src="utils/element_backup.lua" cache="false" />
+    <script type="client" src="utils/shaders.lua" cache="false" />
+    
+    <!-- Client-side scripts -->
+    <script type="client" src="client/selection.lua" cache="false" />
+    <script type="client" src="client/transform.lua" cache="false" />
+    <script type="client" src="client/duplication.lua" cache="false" />
+    <script type="client" src="client/between.lua" cache="false" />
+    <script type="client" src="client/mirror.lua" cache="false" />
+    <script type="client" src="client/autoshade.lua" cache="false" />
+    <script type="client" src="client/settings.lua" cache="false" />
+    <script type="client" src="client/gui.lua" cache="false" />
+    
+    <!-- ACL rights needed for auto-updater -->
+    <aclrequest>
+        <right name="function.fetchRemote" access="true"/>
+        <right name="function.refreshResources" access="true"/>
+        <right name="function.restartResource" access="true"/>
+    </aclrequest>
+</meta>
