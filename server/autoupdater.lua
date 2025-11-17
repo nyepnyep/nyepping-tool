@@ -1,9 +1,8 @@
 -- Auto-updater for NMT
 
 -- Auto-updater configuration
-local AUTO_UPDATE_ENABLED = false -- Disabled due to nested directory issues with MTA file API
+local AUTO_UPDATE_ENABLED = true
 local AUTO_UPDATE_INTERVAL = 3600000 -- Check every hour (in milliseconds)
--- Raw GitHub URL for the repository where updates are hosted. (Updated to the provided repo)
 local GITHUB_REPO_URL = "https://raw.githubusercontent.com/nyepnyep/nyepping-tool/main/"
 
 -- Event to send auto-update status to client
@@ -256,8 +255,6 @@ addEventHandler("onResourceStart", resourceRoot, function()
     if AUTO_UPDATE_ENABLED then
         outputDebugString("[NMT] Auto-updater enabled. Checking every " .. (AUTO_UPDATE_INTERVAL / 60000) .. " minutes")
         setTimer(checkForUpdates, AUTO_UPDATE_INTERVAL, 0)
-        -- Check immediately on start
-        checkForUpdates()
     end
 end)
 
