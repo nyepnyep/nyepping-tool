@@ -409,7 +409,7 @@ local function createGUI()
     
     -- AutoShade Mode section
     yPos = yPos + 0.03
-    NMT.gui.labelAutoShadeMode = guiCreateLabel(0.02, yPos, 0.96, 0.05, "AutoShade Behavior:", true, NMT.gui.tabs[6])
+    NMT.gui.labelAutoShadeMode = guiCreateLabel(0.02, yPos, 0.96, 0.05, "AutoShade Behavior (doesn't work yet, applies to all selected.):", true, NMT.gui.tabs[6])
     guiSetFont(NMT.gui.labelAutoShadeMode, "default-bold-small")
     
     yPos = yPos + 0.06
