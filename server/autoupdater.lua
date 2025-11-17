@@ -5,7 +5,7 @@ local AUTO_UPDATE_ENABLED = false -- Disabled due to nested directory issues wit
 local AUTO_UPDATE_INTERVAL = 3600000 -- Check every hour (in milliseconds)
 -- Raw GitHub URL for the repository where updates are hosted. (Updated to the provided repo)
 local GITHUB_REPO_URL = "https://raw.githubusercontent.com/nyepnyep/nyepping-tool/main/"
-local NMT_VERSION = "1.0.18"
+local NMT_VERSION = "1.0.19"
 
 -- Helper function to compare versions
 local function compareVersions(v1, v2)
@@ -43,8 +43,10 @@ function checkForUpdates(forceCheck)
     outputDebugString("[NMT] Checking for updates...")
     
     -- Fetch the latest meta.xml to check version (with cache buster to avoid stale data)
-    local cacheBuster = "?t=" .. tostring(getRealTime().timestamp)
-    fetchRemote(GITHUB_REPO_URL .. "meta.xml" .. cacheBuster, function(responseData, errno)
+    local cacheBuster = "?cb=" .. tostring(getRealTime().timestamp) .. math.random(10000, 99999)
+    local metaURL = GITHUB_REPO_URL .. "meta.xml" .. cacheBuster
+    outputDebugString("[NMT] [DEBUG] Fetching from: " .. metaURL)
+    fetchRemote(metaURL, function(responseData, errno)
         if errno == 0 and responseData then
             -- Parse version from meta.xml
             local latestVersion = responseData:match('version="([^"]+)"')
@@ -88,7 +90,7 @@ function downloadUpdate()
     outputDebugString("[NMT] [DEBUG] Starting downloadUpdate()")
     
     -- Add cache buster to prevent stale cached responses
-    local cacheBuster = "?t=" .. tostring(getRealTime().timestamp)
+    local cacheBuster = "?cb=" .. tostring(getRealTime().timestamp) .. math.random(10000, 99999)
     local metaURL = GITHUB_REPO_URL .. "meta.xml" .. cacheBuster
     outputDebugString("[NMT] [DEBUG] Fetching meta.xml from: " .. metaURL)
     
@@ -146,7 +148,7 @@ function downloadUpdate()
 
         for _, fileName in ipairs(filesList) do
             -- Add cache buster to each file download to prevent stale data
-            local fileCacheBuster = "?t=" .. tostring(getRealTime().timestamp)
+            local fileCacheBuster = "?cb=" .. tostring(getRealTime().timestamp) .. math.random(10000, 99999)
             local downloadURL = GITHUB_REPO_URL .. fileName .. fileCacheBuster
             outputDebugString("[NMT] [DEBUG] Downloading: " .. downloadURL)
             
