@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nyepping Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: transparent;
+            color: #e0e0e0;
+            overflow: hidden;
+        }
+        
+        .container {
+            width: 480px;
+            height: 800px;
+            background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+            overflow: hidden;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4287f5 0%, #2962d4 100%);
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #252535;
+            padding: 0;
+            border-bottom: 2px solid #4287f5;
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+        
+        .tabs::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .tabs::-webkit-scrollbar-track {
+            background: #1e1e2e;
+        }
+        
+        .tabs::-webkit-scrollbar-thumb {
+            background: #4287f5;
+            border-radius: 2px;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            background: transparent;
+            color: #a0a0a0;
+            border: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab:hover {
+            background: rgba(66, 135, 245, 0.1);
+            color: #e0e0e0;
+        }
+        
+        .tab.active {
+            color: #4287f5;
+            border-bottom: 3px solid #4287f5;
+        }
+        
+        .content {
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .content::-webkit-scrollbar-track {
+            background: #1e1e2e;
+            border-radius: 4px;
+        }
+        
+        .content::-webkit-scrollbar-thumb {
+            background: #4287f5;
+            border-radius: 4px;
+        }
+        
+        .content {
+            scrollbar-width: thin;
+            scrollbar-color: #4287f5 #1e1e2e;
+        }
+        
+        .tab-pane {
+            display: none;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        .section-header {
+            color: #4287f5;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(66, 135, 245, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .input-field {
+            flex: 1;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #b0b0b0;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        input[type="number"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            background: #2a2a3e;
+            border: 1px solid rgba(66, 135, 245, 0.3);
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="number"]:focus,
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #4287f5;
+            box-shadow: 0 0 0 3px rgba(66, 135, 245, 0.1);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px 12px;
+            background: #2a2a3e;
+            border-radius: 8px;
+            border: 1px solid rgba(66, 135, 245, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .checkbox-wrapper:hover {
+            background: rgba(66, 135, 245, 0.1);
+            border-color: #4287f5;
+        }
+        
+        input[type="checkbox"],
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #4287f5;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #4287f5 0%, #2962d4 100%);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(66, 135, 245, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            background: #3a3a4a;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        
+        button.secondary {
+            background: linear-gradient(135deg, #5a5a6a 0%, #4a4a5a 100%);
+        }
+        
+        button.danger {
+            background: linear-gradient(135deg, #f44336 0%, #c62828 100%);
+        }
+        
+        .button-row {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .button-row button {
+            flex: 1;
+        }
+        
+        .info-text {
+            background: rgba(66, 135, 245, 0.1);
+            border-left: 4px solid #4287f5;
+            padding: 12px;
+            margin-bottom: 16px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #b0b0b0;
+            line-height: 1.5;
+        }
+        
+        .footer {
+            background: #1e1e2e;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .selected-count {
+            font-size: 13px;
+            color: #b0b0b0;
+            font-weight: 500;
+        }
+        
+        .footer button {
+            width: auto;
+            padding: 8px 16px;
+            margin: 0;
+            font-size: 12px;
+        }
+        
+        .mirror-checkboxes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .main-element-info {
+            background: rgba(66, 135, 245, 0.2);
+            border: 1px solid #4287f5;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            text-align: center;
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Nyepping Tool</h1>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab(0)">F3+</button>
+            <button class="tab" onclick="switchTab(1)">Duplicate</button>
+            <button class="tab" onclick="switchTab(2)">Between</button>
+            <button class="tab" onclick="switchTab(3)">Shade+</button>
+            <button class="tab" onclick="switchTab(4)">Mirror+</button>
+            <button class="tab" onclick="switchTab(5)">Settings</button>
+        </div>
+        
+        <div class="content">
+            <!-- F3+ Tab -->
+            <div class="tab-pane active" id="tab-0">
+                <div class="section-header">Position</div>
+                <div class="input-row">
+                    <div class="input-field">
+                        <label>X</label>
+                        <input type="number" id="moveX" value="0" step="0.1">
+                    </div>
+                    <div class="input-field">
+                        <label>Y</label>
+                        <input type="number" id="moveY" value="0" step="0.1">
+                    </div>
+                    <div class="input-field">
+                        <label>Z</label>
+                        <input type="number" id="moveZ" value="0" step="0.1">
+                    </div>
+                </div>
+                
+                <div class="section-header">Rotation</div>
+                <div class="input-row">
+                    <div class="input-field">
+                        <label>X</label>
+                        <input type="number" id="rotateX" value="0" step="0.1">
+                    </div>
+                    <div class="input-field">
+                        <label>Y</label>
+                        <input type="number" id="rotateY" value="0" step="0.1">
+                    </div>
+                    <div class="input-field">
+                        <label>Z</label>
+                        <input type="number" id="rotateZ" value="0" step="0.1">
+                    </div>
+                </div>
+                
+                <div class="section-header">Properties</div>
+                <div class="input-row">
+                    <div class="input-field">
+                        <label>Model</label>
+                        <input type="number" id="model" value="3458">
+                    </div>
+                    <div class="input-field">
+                        <label>Scale</label>
+                        <input type="number" id="scale" value="1" step="0.1">
+                    </div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="collisions" checked>
+                        <label for="collisions">Collisions</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="doublesided" checked>
+                        <label for="doublesided">Doublesided</label>
+                    </div>
+                </div>
+                
+                <div class="button-row">
+                    <button id="applyTransform" disabled>Apply Transform</button>
+                    <button class="secondary" onclick="resetInput()">Reset</button>
+                </div>
+                <div class="button-row">
+                    <button id="applyProperties" disabled>Apply Properties</button>
+                    <button id="clone" class="secondary" disabled>Clone</button>
+                </div>
+            </div>
+            
+            <!-- Duplicate Tab -->
+            <div class="tab-pane" id="tab-1">
+                <div class="section-header">Position Offset</div>
+                <div class="input-row">
+                    <div class="input-field">
+                        <label>X</label>
+                        <input type="number" id="addMoveX" value="0" step="0.1">
+                    </div>
+                    <div class="input-field">
+                        <label>Y</label>
+                        <input type="number" id="addMoveY" value="0" step="0.1">
+                    </div>
+                    <div class="input-field">
+                        <label>Z</label>
+                        <input type="number" id="addMoveZ" value="0" step="0.1">
+                    </div>
+                </div>
+                
+                <div class="section-header">Rotation Offset</div>
+                <div class="input-row">
+                    <div class="input-field">
+                        <label>X</label>
+                        <input type="number" id="addRotateX" value="0" step="0.1">
+                    </div>
+                    <div class="input-field">
+                        <label>Y</label>
+                        <input type="number" id="addRotateY" value="0" step="0.1">
+                    </div>
+                    <div class="input-field">
+                        <label>Z</label>
+                        <input type="number" id="addRotateZ" value="0" step="0.1">
+                    </div>
+                </div>
+                
+                <div class="input-field">
+                    <label>Count</label>
+                    <input type="number" id="multiplier" value="5" min="1">
+                </div>
+                
+                <button id="generate" disabled>Generate Duplicates</button>
+                <button class="danger" onclick="duplicateUndo()">Undo Last</button>
+            </div>
+            
+            <!-- Between Tab -->
+            <div class="tab-pane" id="tab-2">
+                <div class="info-text">
+                    Select 2+ elements with Q<br>
+                    Connects in selection order<br>
+                    Recommended limit: 4 objects
+                </div>
+                
+                <div class="input-field">
+                    <label>Amount</label>
+                    <input type="number" id="betweenAmount" value="5" min="1">
+                </div>
+                
+                <div class="button-row">
+                    <button onclick="betweenPreview()">Preview</button>
+                    <button class="secondary" onclick="betweenClear()">Clear</button>
+                </div>
+                
+                <button onclick="betweenGenerate()">Generate</button>
+                <button class="danger" onclick="betweenUndo()">Undo Last</button>
+            </div>
+            
+            <!-- Shade+ Tab -->
+            <div class="tab-pane" id="tab-3">
+                <div class="section-header">Sides</div>
+                <div class="checkbox-group">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="shadeLeft">
+                        <label for="shadeLeft">Left</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="shadeRight">
+                        <label for="shadeRight">Right</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="shadeBottom">
+                        <label for="shadeBottom">Bottom</label>
+                    </div>
+                </div>
+                
+                <div class="input-field">
+                    <label>Front</label>
+                    <select id="shadeFront">
+                        <option value="none">None</option>
+                    </select>
+                </div>
+                
+                <div class="input-field">
+                    <label>Back</label>
+                    <select id="shadeBack">
+                        <option value="none">None</option>
+                    </select>
+                </div>
+                
+                <div class="section-header">Shade Type</div>
+                <div class="checkbox-group">
+                    <div class="checkbox-wrapper">
+                        <input type="radio" id="shadeLighter" name="shadeType" checked>
+                        <label for="shadeLighter">Lighter (3458)</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="radio" id="shadeDarker" name="shadeType">
+                        <label for="shadeDarker">Darker (8558)</label>
+                    </div>
+                </div>
+                
+                <button onclick="shadeApply()">Apply Shading</button>
+                <button class="danger" onclick="shadeUndo()">Undo Last</button>
+            </div>
+            
+            <!-- Mirror+ Tab -->
+            <div class="tab-pane" id="tab-4">
+                <div class="main-element-info" id="mirrorMainElement">Main element: not selected</div>
+                <button class="secondary" onclick="selectMirrorMain()">Select Main Element</button>
+                
+                <div class="info-text">Select axes for position and rotation mirroring</div>
+                
+                <div class="section-header">Mirror Position</div>
+                <div class="mirror-checkboxes">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="mirrorPosXPlus">
+                        <label for="mirrorPosXPlus">X+</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="mirrorPosYPlus">
+                        <label for="mirrorPosYPlus">Y+</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="mirrorPosZPlus">
+                        <label for="mirrorPosZPlus">Z+</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="mirrorPosXMinus">
+                        <label for="mirrorPosXMinus">X-</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="mirrorPosYMinus">
+                        <label for="mirrorPosYMinus">Y-</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="mirrorPosZMinus">
+                        <label for="mirrorPosZMinus">Z-</label>
+                    </div>
+                </div>
+                
+                <div class="section-header">Mirror Rotation</div>
+                <div class="mirror-checkboxes">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="mirrorRotXPlus">
+                        <label for="mirrorRotXPlus">X+</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="mirrorRotYPlus">
+                        <label for="mirrorRotYPlus">Y+</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="mirrorRotZPlus">
+                        <label for="mirrorRotZPlus">Z+</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="mirrorRotXMinus">
+                        <label for="mirrorRotXMinus">X-</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="mirrorRotYMinus">
+                        <label for="mirrorRotYMinus">Y-</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="mirrorRotZMinus">
+                        <label for="mirrorRotZMinus">Z-</label>
+                    </div>
+                </div>
+                
+                <div class="button-row">
+                    <button onclick="mirrorPreview()">Preview</button>
+                    <button class="secondary" onclick="mirrorClear()">Clear</button>
+                </div>
+                
+                <button onclick="mirrorGenerate()">Generate</button>
+                <button class="danger" onclick="mirrorUndo()">Undo Last</button>
+            </div>
+            
+            <!-- Settings Tab -->
+            <div class="tab-pane" id="tab-5">
+                <div class="section-header">Key Binds</div>
+                <div class="input-field">
+                    <label>Select Key</label>
+                    <input type="text" id="selectKey" maxlength="1" value="q">
+                </div>
+                <div class="input-field">
+                    <label>Toggle GUI Key</label>
+                    <input type="text" id="toggleGuiKey" maxlength="1" value="u">
+                </div>
+                
+                <div class="section-header">Selection Mode</div>
+                <div class="checkbox-group">
+                    <div class="checkbox-wrapper">
+                        <input type="radio" id="selectionPerObject" name="selectionMode" checked>
+                        <label for="selectionPerObject">Per-object</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="radio" id="selectionToggle" name="selectionMode">
+                        <label for="selectionToggle">Toggle</label>
+                    </div>
+                </div>
+                
+                <div class="section-header">Auto-updater</div>
+                <div class="info-text" id="autoUpdateInfo">Loading...</div>
+                
+                <div class="button-row">
+                    <button onclick="saveSettings()">Apply Settings</button>
+                    <button class="secondary" onclick="resetSettings()">Reset</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="selected-count" id="selectedCount">Selected: 0</div>
+            <button id="deselectAll" disabled onclick="deselectAll()">Deselect All</button>
+        </div>
+    </div>
+    
+    <script>
+        function switchTab(index) {
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            
+            document.getElementById('tab-' + index).classList.add('active');
+            document.querySelectorAll('.tab')[index].classList.add('active');
+            
+            if (window.mta) {
+                mta.triggerEvent('nmt:tabSwitched', index);
+            }
+        }
+        
+        function setupInputHandlers() {
+            // Number inputs
+            ['moveX', 'moveY', 'moveZ', 'rotateX', 'rotateY', 'rotateZ',
+             'addMoveX', 'addMoveY', 'addMoveZ', 'addRotateX', 'addRotateY', 'addRotateZ',
+             'multiplier', 'betweenAmount', 'model', 'scale'].forEach(id => {
+                document.getElementById(id).addEventListener('input', function() {
+                    if (window.mta) {
+                        mta.triggerEvent('nmt:inputChanged', id, parseFloat(this.value) || 0);
+                    }
+                });
+            });
+            
+            // Checkboxes
+            ['collisions', 'doublesided', 'shadeLeft', 'shadeRight', 'shadeBottom',
+             'mirrorPosXPlus', 'mirrorPosYPlus', 'mirrorPosZPlus',
+             'mirrorPosXMinus', 'mirrorPosYMinus', 'mirrorPosZMinus',
+             'mirrorRotXPlus', 'mirrorRotYPlus', 'mirrorRotZPlus',
+             'mirrorRotXMinus', 'mirrorRotYMinus', 'mirrorRotZMinus'].forEach(id => {
+                document.getElementById(id).addEventListener('change', function() {
+                    if (window.mta) {
+                        mta.triggerEvent('nmt:inputChanged', id, this.checked);
+                    }
+                });
+            });
+            
+            // Dropdowns
+            document.getElementById('shadeFront').addEventListener('change', function() {
+                if (window.mta) {
+                    mta.triggerEvent('nmt:inputChanged', 'shadeFront', this.selectedIndex);
+                }
+            });
+            
+            document.getElementById('shadeBack').addEventListener('change', function() {
+                if (window.mta) {
+                    mta.triggerEvent('nmt:inputChanged', 'shadeBack', this.selectedIndex);
+                }
+            });
+            
+            // Radio buttons
+            ['shadeLighter', 'shadeDarker'].forEach(id => {
+                document.getElementById(id).addEventListener('change', function() {
+                    if (this.checked && window.mta) {
+                        mta.triggerEvent('nmt:inputChanged', 'shadeType', id === 'shadeDarker' ? 'darker' : 'lighter');
+                    }
+                });
+            });
+            
+            ['selectKey', 'toggleGuiKey'].forEach(id => {
+                document.getElementById(id).addEventListener('input', function() {
+                    if (window.mta) {
+                        mta.triggerEvent('nmt:inputChanged', id, this.value);
+                    }
+                });
+            });
+            
+            ['selectionPerObject', 'selectionToggle'].forEach(id => {
+                document.getElementById(id).addEventListener('change', function() {
+                    if (this.checked && window.mta) {
+                        mta.triggerEvent('nmt:inputChanged', 'selectionMode', id === 'selectionToggle' ? 'toggle' : 'per-object');
+                    }
+                });
+            });
+            
+            // Button handlers
+            document.getElementById('applyTransform').addEventListener('click', () => window.mta && mta.triggerEvent('nmt:applyTransform'));
+            document.getElementById('applyProperties').addEventListener('click', () => window.mta && mta.triggerEvent('nmt:applyProperties'));
+            document.getElementById('clone').addEventListener('click', () => window.mta && mta.triggerEvent('nmt:clone'));
+            document.getElementById('generate').addEventListener('click', () => window.mta && mta.triggerEvent('nmt:generate'));
+        }
+        
+        function resetInput() {
+            if (window.mta) {
+                mta.triggerEvent('nmt:resetInput');
+            }
+        }
+        
+        function deselectAll() {
+            if (window.mta) {
+                mta.triggerEvent('nmt:deselectAll');
+            }
+        }
+        
+        function duplicateUndo() {
+            if (window.mta) {
+                mta.triggerEvent('nmt:duplicateUndo');
+            }
+        }
+        
+        function betweenPreview() {
+            if (window.mta) {
+                mta.triggerEvent('nmt:betweenPreview');
+            }
+        }
+        
+        function betweenClear() {
+            if (window.mta) {
+                mta.triggerEvent('nmt:betweenClear');
+            }
+        }
+        
+        function betweenGenerate() {
+            if (window.mta) {
+                mta.triggerEvent('nmt:betweenGenerate');
+            }
+        }
+        
+        function betweenUndo() {
+            if (window.mta) {
+                mta.triggerEvent('nmt:betweenUndo');
+            }
+        }
+        
+        function shadeApply() {
+            if (window.mta) {
+                mta.triggerEvent('nmt:shadeApply');
+            }
+        }
+        
+        function shadeUndo() {
+            if (window.mta) {
+                mta.triggerEvent('nmt:shadeUndo');
+            }
+        }
+        
+        function selectMirrorMain() {
+            if (window.mta) {
+                mta.triggerEvent('nmt:selectMirrorMain');
+            }
+        }
+        
+        function mirrorPreview() {
+            if (window.mta) {
+                mta.triggerEvent('nmt:mirrorPreview');
+            }
+        }
+        
+        function mirrorClear() {
+            if (window.mta) {
+                mta.triggerEvent('nmt:mirrorClear');
+            }
+        }
+        
+        function mirrorGenerate() {
+            if (window.mta) {
+                mta.triggerEvent('nmt:mirrorGenerate');
+            }
+        }
+        
+        function mirrorUndo() {
+            if (window.mta) {
+                mta.triggerEvent('nmt:mirrorUndo');
+            }
+        }
+        
+        function saveSettings() {
+            if (window.mta) {
+                mta.triggerEvent('nmt:saveSettings');
+            }
+        }
+        
+        function resetSettings() {
+            if (window.mta) {
+                mta.triggerEvent('nmt:resetSettings');
+            }
+        }
+        
+        setupInputHandlers();
+    </script>
+</body>
+</html>
