@@ -155,6 +155,10 @@
             box-shadow: 0 0 0 2px rgba(157, 0, 255, 0.1);
         }
         
+        select {
+            cursor: pointer;
+        }
+        
         .checkbox-group {
             display: flex;
             gap: 10px;
@@ -474,7 +478,7 @@
                     </div>
                 </div>
                 
-                <div class="input-field">
+                <div class="input-field" style="margin-bottom: 20px;">
                     <label>Count</label>
                     <input type="number" id="multiplier" value="5" min="1">
                 </div>
@@ -491,7 +495,7 @@
                     Recommended limit: 4 objects
                 </div>
                 
-                <div class="input-field">
+                <div class="input-field" style="margin-bottom: 20px;">
                     <label>Amount</label>
                     <input type="number" id="betweenAmount" value="5" min="1">
                 </div>
@@ -640,6 +644,14 @@
                     <label>Toggle GUI Key</label>
                     <input type="text" id="toggleGuiKey" maxlength="1" value="u">
                 </div>
+                <div class="input-field">
+                    <label>Deselect All Modifier</label>
+                    <select id="deselectModifier">
+                        <option value="none">None (Disabled)</option>
+                        <option value="shift">Shift + Select Key</option>
+                        <option value="ctrl">Ctrl + Select Key</option>
+                    </select>
+                </div>
                 
                 <div class="section-header">Selection Mode</div>
                 <div class="checkbox-group">
@@ -654,7 +666,7 @@
                 </div>
                 
                 <div class="section-header">Auto-updater</div>
-                <div class="info-text" id="autoUpdateInfo">Loading...</div>
+                <div class="info-text" id="autoUpdateInfo">Loading... (1-2 days™)</div>
                 
                 <div class="button-row">
                     <button onclick="saveSettings()">Apply Settings</button>
@@ -685,8 +697,32 @@
         function setupInputHandlers() {
             // Number inputs
             ['moveX', 'moveY', 'moveZ', 'rotateX', 'rotateY', 'rotateZ',
-             'addMoveX', 'addMoveY', 'addMoveZ', 'addRotateX', 'addRotateY', 'addRotateZ',
-             'multiplier', 'betweenAmount', 'model', 'scale'].forEach(id => {
+             'model', 'scale'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', function() {
+                        if (window.mta) {
+                            mta.triggerEvent('nmt:inputChanged', id, parseFloat(this.value) || 0);
+                        }
+                    });
+                }
+            });
+            
+            // Duplicate tab inputs with auto-preview
+            ['addMoveX', 'addMoveY', 'addMoveZ', 'addRotateX', 'addRotateY', 'addRotateZ',
+             'multiplier'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', function() {
+                        if (window.mta) {
+                            mta.triggerEvent('nmt:inputChanged', id, parseFloat(this.value) || 0);
+                        }
+                    });
+                }
+            });
+            
+            // Between tab inputs
+            ['betweenAmount'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) {
                     el.addEventListener('input', function() {
@@ -735,6 +771,7 @@
                     if (window.mta) {
                         mta.triggerEvent('nmt:inputChanged', 'shadeFront', this.selectedIndex);
                     }
+                    this.blur();
                 });
             }
             
@@ -744,6 +781,17 @@
                     if (window.mta) {
                         mta.triggerEvent('nmt:inputChanged', 'shadeBack', this.selectedIndex);
                     }
+                    this.blur();
+                });
+            }
+            
+            const deselectModifier = document.getElementById('deselectModifier');
+            if (deselectModifier) {
+                deselectModifier.addEventListener('change', function() {
+                    if (window.mta) {
+                        mta.triggerEvent('nmt:inputChanged', 'deselectModifier', this.selectedIndex);
+                    }
+                    this.blur();
                 });
             }
             
@@ -892,6 +940,39 @@
         }
         
         setupInputHandlers();
+        
+        // Send initial values to Lua when page loads
+        setTimeout(function() {
+            if (window.mta) {
+                // Send all duplicate tab values
+                ['addMoveX', 'addMoveY', 'addMoveZ', 'addRotateX', 'addRotateY', 'addRotateZ', 'multiplier'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        mta.triggerEvent('nmt:inputChanged', id, parseFloat(el.value) || 0);
+                    }
+                });
+                
+                // Send all transform tab values
+                ['moveX', 'moveY', 'moveZ', 'rotateX', 'rotateY', 'rotateZ', 'model', 'scale'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        mta.triggerEvent('nmt:inputChanged', id, parseFloat(el.value) || 0);
+                    }
+                });
+                
+                // Send between tab values
+                const betweenAmount = document.getElementById('betweenAmount');
+                if (betweenAmount) {
+                    mta.triggerEvent('nmt:inputChanged', 'betweenAmount', parseFloat(betweenAmount.value) || 0);
+                }
+                
+                // Send settings tab values
+                const deselectModifier = document.getElementById('deselectModifier');
+                if (deselectModifier) {
+                    mta.triggerEvent('nmt:inputChanged', 'deselectModifier', deselectModifier.selectedIndex);
+                }
+            }
+        }, 100);
     </script>
 </body>
 </html>

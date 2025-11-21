@@ -19,7 +19,11 @@ end
 
 -- Render duplicate previews
 local function renderDuplicates()
-    if not NMT.selectedElements then
+    if not NMT.selectedElements or not next(NMT.selectedElements) then
+        return
+    end
+    
+    if not NMT.gui or not NMT.gui.editMultiplier then
         return
     end
 
@@ -47,9 +51,9 @@ local function renderDuplicates()
                 NMT.createdElements[element] = {}
             else
                 if #NMT.createdElements[element] ~= multiplier then
-                    for _, element in pairs(NMT.createdElements[element]) do
-                        if isElement(element) then
-                            destroyElement(element)
+                    for _, duplicateElement in pairs(NMT.createdElements[element]) do
+                        if isElement(duplicateElement) then
+                            destroyElement(duplicateElement)
                         end
                     end
 
@@ -63,37 +67,42 @@ local function renderDuplicates()
             local scale = getObjectScale(element)
             local originPosition = element.matrix
 
-            if type(originPosition) == "userdata" and type(originPosition.transformPosition) == "function" then
-                for i = 1, multiplier do
-                    local newElement = NMT.createdElements[element][i]
-                    if not newElement then
-                        newElement = createObject(model, px, py, pz)
-                        table.insert(NMT.createdElements[element], newElement)
+            -- Start from the original element's rotation for each selected element
+            local currentRX, currentRY, currentRZ = rx, ry, rz
+            
+            for i = 1, multiplier do
+                local newElement = NMT.createdElements[element][i]
+                if not newElement or not isElement(newElement) then
+                    newElement = createObject(model, px, py, pz)
+                    if newElement then
+                        NMT.createdElements[element][i] = newElement
+                    else
+                        break
                     end
+                end
 
-                    setElementID(newElement, "NMT PREVIEW (" .. i .. ")")
-                    setElementModel(newElement, model)
-                    setObjectScale(newElement, scale)
-                    setElementAlpha(newElement, 155)
+                setElementID(newElement, "NMT PREVIEW (" .. i .. ")")
+                setElementModel(newElement, model)
+                setObjectScale(newElement, scale)
+                setElementAlpha(newElement, 155)
+                setElementDimension(newElement, dimension)
 
-                    -- Position
+                -- Position
+                if type(originPosition) == "userdata" and type(originPosition.transformPosition) == "function" then
                     local success, positionVector = pcall(originPosition.transformPosition, originPosition, elementVector)
                     if success and positionVector and positionVector.x and positionVector.y and positionVector.z then
                         setElementPosition(newElement, positionVector.x, positionVector.y, positionVector.z)
                     end
-
-                    -- Rotation
-                    rx, ry, rz = rotateX(rx, ry, rz, addrx)
-                    rx, ry, rz = rotateY(rx, ry, rz, addry)
-                    rx, ry, rz = rotateZ(rx, ry, rz, addrz)
-                    setElementRotation(newElement, rx, ry, rz)
-
-                    -- Dimension
-                    setElementDimension(newElement, dimension)
-
-                    -- Update origin
-                    originPosition = newElement.matrix
                 end
+
+                -- Rotation - accumulate from the original rotation
+                currentRX, currentRY, currentRZ = rotateX(currentRX, currentRY, currentRZ, addrx)
+                currentRX, currentRY, currentRZ = rotateY(currentRX, currentRY, currentRZ, addry)
+                currentRX, currentRY, currentRZ = rotateZ(currentRX, currentRY, currentRZ, addrz)
+                setElementRotation(newElement, currentRX, currentRY, currentRZ)
+
+                -- Update origin for next iteration
+                originPosition = newElement.matrix
             end
         end
     end
@@ -101,10 +110,15 @@ end
 
 -- Toggle duplication preview
 function NMT.previewDuplicates(state)
-    NMT.clearDuplicates()
+    -- Remove existing handler (removeEventHandler doesn't error if not attached)
     removeEventHandler("onClientRender", root, renderDuplicates)
+    
     if state then
+        -- Add render handler for preview
         addEventHandler("onClientRender", root, renderDuplicates, true, "low-9999")
+    else
+        -- Clear duplicates when disabling
+        NMT.clearDuplicates()
     end
 end
 
@@ -112,6 +126,13 @@ end
 addEvent("nmt:onGUIToggle")
 addEventHandler("nmt:onGUIToggle", root, function(state)
     NMT.previewDuplicates(state and guiGetSelectedTab(NMT.gui.tabPanel) == NMT.gui.tabs[2])
+end)
+
+-- Handle tab switching
+addEventHandler("onClientGUITabSwitched", root, function(selectedTab)
+    if NMT.gui and source == NMT.gui.tabPanel then
+        NMT.previewDuplicates(selectedTab == NMT.gui.tabs[2])
+    end
 end)
 
 -- Handle deselect all event
@@ -130,7 +151,13 @@ end
 
 -- Generate duplicates on server
 function NMT.generateDuplicates()
-    if not NMT.selectedElements or not NMT.createdElements then
+    if not NMT.selectedElements then
+        exports.editor_gui:outputMessage("No elements selected", 255, 0, 0, 5000)
+        return
+    end
+    
+    if not NMT.createdElements then
+        exports.editor_gui:outputMessage("No preview elements found. Switch to duplicate tab first.", 255, 165, 0, 5000)
         return
     end
 
@@ -146,6 +173,11 @@ function NMT.generateDuplicates()
                 table.insert(data, {model, px, py, pz, rx, ry, rz, scale})
             end
         end
+    end
+
+    if #data == 0 then
+        exports.editor_gui:outputMessage("No duplicates created. Set Count and offsets in the Duplicate tab.", 255, 165, 0, 5000)
+        return
     end
 
     exports.editor_gui:outputMessage("Generating " .. #data .. " element(s)", 0, 255, 0, 5000)

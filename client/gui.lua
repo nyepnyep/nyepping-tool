@@ -87,6 +87,14 @@ local function createGUI()
     -- Settings Inputs
     createHiddenEdit("editSelectKey", NMT.settings.keyBindSelect)
     createHiddenEdit("editToggleGUIKey", NMT.settings.keyBindToggleGUI)
+    
+    NMT.gui.comboDeselectModifier = guiCreateComboBox(0, 0, 0, 0, "None", false, hiddenWindow)
+    guiComboBoxAddItem(NMT.gui.comboDeselectModifier, "None")
+    guiComboBoxAddItem(NMT.gui.comboDeselectModifier, "Shift")
+    guiComboBoxAddItem(NMT.gui.comboDeselectModifier, "Ctrl")
+    guiComboBoxAddItem(NMT.gui.comboDeselectModifier, "Alt")
+    guiComboBoxSetSelected(NMT.gui.comboDeselectModifier, 0)
+    
     NMT.gui.radioSelectionPerObject = guiCreateRadioButton(0, 0, 0, 0, "Per", false, hiddenWindow)
     NMT.gui.radioSelectionToggle = guiCreateRadioButton(0, 0, 0, 0, "Toggle", false, hiddenWindow)
     if NMT.settings.selectionMode == "toggle" then
@@ -179,6 +187,7 @@ local function createGUI()
         -- Special handling
         if id == "shadeFront" then guiComboBoxSetSelected(NMT.gui.comboShadeFront, value) end
         if id == "shadeBack" then guiComboBoxSetSelected(NMT.gui.comboShadeBack, value) end
+        if id == "deselectModifier" then guiComboBoxSetSelected(NMT.gui.comboDeselectModifier, value) end
         if id == "shadeType" then
             guiRadioButtonSetSelected(NMT.gui.radioShadeLighter, value == "lighter")
             guiRadioButtonSetSelected(NMT.gui.radioShadeDarker, value == "darker")
@@ -190,7 +199,9 @@ local function createGUI()
         
         -- Trigger logic
         if id:find("move") or id:find("rotate") then
-            if not id:find("add") then NMT.moveXYZ(); NMT.rotateXYZ() end
+            if not id:find("add") then 
+                NMT.moveXYZ(); NMT.rotateXYZ() 
+            end
         end
     end)
     
@@ -249,7 +260,13 @@ local function createGUI()
         if NMT.gui.tabs[index + 1] then
             guiSetSelectedTab(NMT.gui.tabPanel, NMT.gui.tabs[index + 1])
         end
-        NMT.previewDuplicates(index == 1) -- Tab 1 is Duplicate in HTML (0-indexed in JS)
+        
+        -- Handle duplicate tab preview
+        if NMT.previewDuplicates then
+            -- Tab indices from CEF: 0=F3+, 1=Duplicate, 2=Between, etc.
+            local isDuplicateTab = (tonumber(index) == 1)
+            NMT.previewDuplicates(isDuplicateTab)
+        end
     end)
     
     -- 4. Sync Loop (Update UI from Lua state)

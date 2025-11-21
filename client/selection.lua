@@ -120,6 +120,38 @@ end)
 
 -- Key handler for selection
 function NMT.selectKeyHandler()
+    -- Check for deselect modifier
+    local deselectModifier = NMT.settings.deselectModifier or "none"
+    
+    if deselectModifier ~= "none" then
+        local modifierPressed = false
+        
+        if deselectModifier == "shift" and (getKeyState("lshift") or getKeyState("rshift")) then
+            modifierPressed = true
+        elseif deselectModifier == "ctrl" and (getKeyState("lctrl") or getKeyState("rctrl")) then
+            modifierPressed = true
+        end
+        
+        if modifierPressed then
+            if NMT.deselectAllElements then
+                NMT.deselectAllElements()
+                local modName = deselectModifier:sub(1,1):upper() .. deselectModifier:sub(2)
+                exports.editor_gui:outputMessage("Deselected all elements (" .. modName .. " + " .. NMT.settings.keyBindSelect:upper() .. ")", 255, 255, 0, 3500)
+            end
+            return
+        end
+    end
+    
+    -- Ignore if any modifier keys are pressed (to avoid conflicts) BUT only if they're not the configured deselect modifier
+    local hasShift = getKeyState("lshift") or getKeyState("rshift")
+    local hasCtrl = getKeyState("lctrl") or getKeyState("rctrl")
+    local hasAlt = getKeyState("lalt") or getKeyState("ralt")
+    
+    -- Only ignore modifiers that aren't the deselect modifier (Alt always blocks since it's not an option)
+    if (hasShift and deselectModifier ~= "shift") or (hasCtrl and deselectModifier ~= "ctrl") or hasAlt then
+        return
+    end
+    
     -- Toggle mode: pressing the key toggles selection mode on/off
     if NMT.settings.selectionMode == "toggle" then
         toggleModeActive = not toggleModeActive

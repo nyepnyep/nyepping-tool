@@ -20,6 +20,10 @@ addEventHandler("nmt:receiveSettings", root, function(savedSettings)
         NMT.settings.keyBindToggleGUI = savedSettings.keyBindToggleGUI
     end
     
+    if savedSettings.deselectModifier then
+        NMT.settings.deselectModifier = savedSettings.deselectModifier
+    end
+    
     -- Load selection mode
     if savedSettings.selectionMode then
         NMT.settings.selectionMode = savedSettings.selectionMode
@@ -51,6 +55,14 @@ function NMT.updateGUIWithSettings()
     end
     if NMT.gui.editToggleGUIKey then
         guiSetText(NMT.gui.editToggleGUIKey, NMT.settings.keyBindToggleGUI)
+    end
+    if NMT.gui.comboDeselectModifier then
+        local modifierIndex = 0
+        if NMT.settings.deselectModifier == "shift" then modifierIndex = 1
+        elseif NMT.settings.deselectModifier == "ctrl" then modifierIndex = 2
+        elseif NMT.settings.deselectModifier == "alt" then modifierIndex = 3
+        end
+        guiComboBoxSetSelected(NMT.gui.comboDeselectModifier, modifierIndex)
     end
     
     -- Update selection mode radio buttons
@@ -90,6 +102,7 @@ function NMT.saveSettings()
     local settingsData = {
         keyBindSelect = NMT.settings.keyBindSelect,
         keyBindToggleGUI = NMT.settings.keyBindToggleGUI,
+        deselectModifier = NMT.settings.deselectModifier,
         selectionMode = NMT.settings.selectionMode,
         autoShadeMode = NMT.settings.autoShadeMode
     }
@@ -113,6 +126,17 @@ function NMT.applySettings()
     if newSelectKey == "" or newToggleKey == "" then
         return
     end
+    
+    -- Get deselect modifier
+    local deselectModifier = "none"
+    if NMT.gui.comboDeselectModifier then
+        local selected = guiComboBoxGetSelected(NMT.gui.comboDeselectModifier)
+        if selected == 1 then deselectModifier = "shift"
+        elseif selected == 2 then deselectModifier = "ctrl"
+        elseif selected == 3 then deselectModifier = "alt"
+        end
+    end
+    NMT.settings.deselectModifier = deselectModifier
     
     -- Update selection mode
     if NMT.gui.radioSelectionPerObject and NMT.gui.radioSelectionToggle then
@@ -163,6 +187,7 @@ function NMT.resetSettings()
     -- Reset to defaults
     NMT.settings.keyBindSelect = "Q"
     NMT.settings.keyBindToggleGUI = "u"
+    NMT.settings.deselectModifier = "none"
     NMT.settings.colorSelectedPrimary = {0, 1, 0, 1}
     NMT.settings.colorSelectedSecondary = {1, 0.6, 0, 1}
     NMT.settings.autoShadeMode = "single"
@@ -171,6 +196,9 @@ function NMT.resetSettings()
     -- Update GUI
     guiSetText(NMT.gui.editSelectKey, NMT.settings.keyBindSelect)
     guiSetText(NMT.gui.editToggleGUIKey, NMT.settings.keyBindToggleGUI)
+    if NMT.gui.comboDeselectModifier then
+        guiComboBoxSetSelected(NMT.gui.comboDeselectModifier, 0)
+    end
     if NMT.gui.radioSelectionPerObject then
         guiRadioButtonSetSelected(NMT.gui.radioSelectionPerObject, true)
     end

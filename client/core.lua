@@ -7,6 +7,7 @@ _G.NMT = {}
 NMT.settings = {
     keyBindSelect = "Q",
     keyBindToggleGUI = "u",
+    deselectModifier = "none", -- "none", "shift", "ctrl", "alt"
     colorSelectedPrimary = {0, 1, 0, 1},     -- Green
     colorSelectedSecondary = {1, 0.6, 0, 1}, -- Orange
     autoShadeMode = "single",  -- "single" or "group"
