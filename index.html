@@ -9,6 +9,11 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none;
+        }
+        
+        html, body {
+            height: 100%;
         }
         
         body {
@@ -19,100 +24,63 @@
         }
         
         .container {
-            width: 480px;
-            height: 800px;
-            background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+            width: 100%;
+            height: 100%;
+            background: url('bg.png') center center / cover no-repeat, linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
             overflow: hidden;
-            border-radius: 5px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             flex-direction: column;
         }
         
-        .header {
-            background: linear-gradient(135deg, #4287f5 0%, #2962d4 100%);
-            padding: 10px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 24px;
-            font-weight: 600;
-            color: #fff;
-        }
-        
         .tabs {
             display: flex;
-            background: #252535;
+            background: #20202e;
             padding: 0;
-            border-bottom: 2px solid #4287f5;
             overflow-x: auto;
-            scrollbar-width: thin;
-        }
-        
-        .tabs::-webkit-scrollbar {
-            height: 4px;
-        }
-        
-        .tabs::-webkit-scrollbar-track {
-            background: #1e1e2e;
-        }
-        
-        .tabs::-webkit-scrollbar-thumb {
-            background: #4287f5;
-            border-radius: 2px;
         }
         
         .tab {
-            padding: 12px 20px;
+            flex: 1;
+            padding: 14px 6px;
             cursor: pointer;
             background: transparent;
             color: #a0a0a0;
             border: none;
-            font-size: 13px;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
             white-space: nowrap;
-            border-bottom: 3px solid transparent;
+            border-bottom: 2px solid transparent;
+            text-align: center;
         }
         
         .tab:hover {
-            background: rgba(66, 135, 245, 0.1);
-            color: #e0e0e0;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
         }
         
         .tab.active {
-            color: #4287f5;
-            border-bottom: 3px solid #4287f5;
+            color: #9D00FF;
+            border-bottom: 2px solid #9D00FF;
+            background: rgba(157, 0, 255, 0.05);
         }
         
         .content {
-            padding: 20px;
+            padding: 24px;
             flex: 1;
             overflow-y: auto;
-        }
-        
-        .content::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .content::-webkit-scrollbar-track {
-            background: #1e1e2e;
-            border-radius: 4px;
-        }
-        
-        .content::-webkit-scrollbar-thumb {
-            background: #4287f5;
-            border-radius: 4px;
-        }
-        
-        .content {
             scrollbar-width: thin;
-            scrollbar-color: #4287f5 #1e1e2e;
+            scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
         }
         
         .tab-pane {
             display: none;
+            animation: fadeIn 0.2s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .tab-pane.active {
@@ -120,20 +88,25 @@
         }
         
         .section-header {
-            color: #4287f5;
-            font-size: 14px;
-            font-weight: 600;
+            color: #9D00FF;
+            font-size: 12px;
+            font-weight: 700;
             margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid rgba(66, 135, 245, 0.3);
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(157, 0, 255, 0.2);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+            margin-top: 8px;
+        }
+        
+        .section-header:first-child {
+            margin-top: 0;
         }
         
         .input-row {
             display: flex;
             gap: 12px;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
         
         .input-field {
@@ -143,9 +116,10 @@
         label {
             display: block;
             margin-bottom: 6px;
-            color: #b0b0b0;
-            font-size: 12px;
-            font-weight: 500;
+            color: #a0a0a0;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
         }
         
         input[type="number"],
@@ -153,114 +127,189 @@
         select {
             width: 100%;
             padding: 10px 12px;
-            background: #2a2a3e;
-            border: 1px solid rgba(66, 135, 245, 0.3);
-            border-radius: 8px;
-            color: #e0e0e0;
+            background: #252535;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            color: #fff;
             font-size: 13px;
-            transition: all 0.3s ease;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+        
+        input[type="number"] {
+            appearance: textfield;
         }
         
         input[type="number"]:focus,
         input[type="text"]:focus,
         select:focus {
             outline: none;
-            border-color: #4287f5;
-            box-shadow: 0 0 0 3px rgba(66, 135, 245, 0.1);
+            border-color: #9D00FF;
+            background: rgba(157, 0, 255, 0.05);
+            box-shadow: 0 0 0 2px rgba(157, 0, 255, 0.1);
         }
         
         .checkbox-group {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
         
         .checkbox-wrapper {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             cursor: pointer;
-            padding: 8px 12px;
-            background: #2a2a3e;
-            border-radius: 8px;
-            border: 1px solid rgba(66, 135, 245, 0.2);
-            transition: all 0.3s ease;
+            padding: 10px 14px;
+            background: #252535;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.2s ease;
+            flex: 1;
+            min-width: 120px;
+            position: relative;
         }
         
         .checkbox-wrapper:hover {
-            background: rgba(66, 135, 245, 0.1);
-            border-color: #4287f5;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .checkbox-wrapper label {
+            margin: 0;
+            cursor: pointer;
+            color: #e0e0e0;
+            font-size: 13px;
+            text-transform: none;
+            display: flex;
+            align-items: center;
+            width: 100%;
         }
         
         input[type="checkbox"],
         input[type="radio"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: #4287f5;
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .checkbox-wrapper input[type="checkbox"] + label::before,
+        .checkbox-wrapper input[type="radio"] + label::before {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 10px;
+            background: #1a1a2a;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            position: relative;
+        }
+        
+        .checkbox-wrapper input[type="checkbox"] + label::before {
+            border-radius: 4px;
+        }
+        
+        .checkbox-wrapper input[type="radio"] + label::before {
+            border-radius: 50%;
+        }
+        
+        .checkbox-wrapper input[type="checkbox"]:checked + label::before {
+            background: #9D00FF;
+            border-color: #9D00FF;
+            position: relative;
+        }
+        
+        .checkbox-wrapper input[type="radio"]:checked + label::before {
+            background: #9D00FF;
+            border-color: #9D00FF;
+            box-shadow: inset 0 0 0 3px #1a1a2a;
         }
         
         button {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(135deg, #4287f5 0%, #2962d4 100%);
+            background: linear-gradient(135deg, #9D00FF 0%, #7a00cc 100%);
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             color: #fff;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(66, 135, 245, 0.4);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(157, 0, 255, 0.25);
+            filter: brightness(1.1);
         }
         
         button:active {
-            transform: translateY(0);
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         button:disabled {
-            background: #3a3a4a;
+            background: #353545;
+            color: #666;
             cursor: not-allowed;
-            opacity: 0.5;
+            transform: none;
+            box-shadow: none;
+            filter: none;
         }
         
         button.secondary {
-            background: linear-gradient(135deg, #5a5a6a 0%, #4a4a5a 100%);
+            background: #353545;
+            color: #e0e0e0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        button.secondary:hover {
+            background: #404050;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
         }
         
         button.danger {
-            background: linear-gradient(135deg, #f44336 0%, #c62828 100%);
+            background: linear-gradient(135deg, #ff5252 0%, #d32f2f 100%);
+        }
+        
+        button.danger:hover {
+            box-shadow: 0 6px 12px rgba(211, 47, 47, 0.25);
         }
         
         .button-row {
             display: flex;
             gap: 10px;
+            margin-bottom: 10px;
         }
         
         .button-row button {
+            margin-bottom: 0;
             flex: 1;
         }
         
         .info-text {
-            background: rgba(66, 135, 245, 0.1);
-            border-left: 4px solid #4287f5;
-            padding: 12px;
-            margin-bottom: 16px;
-            border-radius: 4px;
-            font-size: 12px;
-            color: #b0b0b0;
+            background: rgba(157, 0, 255, 0.08);
+            border-left: 3px solid #9D00FF;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            border-radius: 0 6px 6px 0;
+            font-size: 13px;
+            color: #a0a0a0;
             line-height: 1.5;
         }
         
         .footer {
-            background: #1e1e2e;
-            padding: 12px 20px;
+            background: #20202e;
+            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -269,13 +318,13 @@
         
         .selected-count {
             font-size: 13px;
-            color: #b0b0b0;
-            font-weight: 500;
+            color: #a0a0a0;
+            font-weight: 600;
         }
         
         .footer button {
             width: auto;
-            padding: 8px 16px;
+            padding: 8px 20px;
             margin: 0;
             font-size: 12px;
         }
@@ -283,28 +332,31 @@
         .mirror-checkboxes {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 16px;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .mirror-checkboxes .checkbox-wrapper {
+            min-width: 0;
+            justify-content: center;
+            padding: 8px;
         }
         
         .main-element-info {
-            background: rgba(66, 135, 245, 0.2);
-            border: 1px solid #4287f5;
-            border-radius: 8px;
+            background: rgba(156, 39, 176, 0.1);
+            border: 1px solid rgba(156, 39, 176, 0.3);
+            border-radius: 6px;
             padding: 12px;
             margin-bottom: 12px;
             text-align: center;
-            font-weight: 500;
-            color: #e0e0e0;
+            font-weight: 600;
+            color: #e1bee7;
+            font-size: 13px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>Nyepping Tool</h1>
-        </div>
-        
         <div class="tabs">
             <button class="tab active" onclick="switchTab(0)">F3+</button>
             <button class="tab" onclick="switchTab(1)">Duplicate</button>
@@ -582,11 +634,11 @@
                 <div class="section-header">Selection Mode</div>
                 <div class="checkbox-group">
                     <div class="checkbox-wrapper">
-                        <input type="radio" id="selectionPerObject" name="selectionMode" checked>
+                        <input type="radio" id="selectionPerObject" name="selectionMode">
                         <label for="selectionPerObject">Per-object</label>
                     </div>
                     <div class="checkbox-wrapper">
-                        <input type="radio" id="selectionToggle" name="selectionMode">
+                        <input type="radio" id="selectionToggle" name="selectionMode" checked>
                         <label for="selectionToggle">Toggle</label>
                     </div>
                 </div>
@@ -625,69 +677,112 @@
             ['moveX', 'moveY', 'moveZ', 'rotateX', 'rotateY', 'rotateZ',
              'addMoveX', 'addMoveY', 'addMoveZ', 'addRotateX', 'addRotateY', 'addRotateZ',
              'multiplier', 'betweenAmount', 'model', 'scale'].forEach(id => {
-                document.getElementById(id).addEventListener('input', function() {
-                    if (window.mta) {
-                        mta.triggerEvent('nmt:inputChanged', id, parseFloat(this.value) || 0);
-                    }
-                });
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', function() {
+                        if (window.mta) {
+                            mta.triggerEvent('nmt:inputChanged', id, parseFloat(this.value) || 0);
+                        }
+                    });
+                }
             });
             
             // Checkboxes
-            ['collisions', 'doublesided', 'shadeLeft', 'shadeRight', 'shadeBottom',
-             'mirrorPosXPlus', 'mirrorPosYPlus', 'mirrorPosZPlus',
+            ['collisions', 'doublesided', 'shadeLeft', 'shadeRight', 'shadeBottom'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('change', function() {
+                        if (window.mta) {
+                            mta.triggerEvent('nmt:inputChanged', id, this.checked);
+                        }
+                    });
+                }
+            });
+            
+            // Mirror checkboxes with auto-preview
+            ['mirrorPosXPlus', 'mirrorPosYPlus', 'mirrorPosZPlus',
              'mirrorPosXMinus', 'mirrorPosYMinus', 'mirrorPosZMinus',
              'mirrorRotXPlus', 'mirrorRotYPlus', 'mirrorRotZPlus',
              'mirrorRotXMinus', 'mirrorRotYMinus', 'mirrorRotZMinus'].forEach(id => {
-                document.getElementById(id).addEventListener('change', function() {
-                    if (window.mta) {
-                        mta.triggerEvent('nmt:inputChanged', id, this.checked);
-                    }
-                });
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('change', function() {
+                        if (window.mta) {
+                            mta.triggerEvent('nmt:inputChanged', id, this.checked);
+                            // Auto-preview after a short delay
+                            setTimeout(() => {
+                                mirrorPreview();
+                            }, 100);
+                        }
+                    });
+                }
             });
             
             // Dropdowns
-            document.getElementById('shadeFront').addEventListener('change', function() {
-                if (window.mta) {
-                    mta.triggerEvent('nmt:inputChanged', 'shadeFront', this.selectedIndex);
-                }
-            });
+            const shadeFront = document.getElementById('shadeFront');
+            if (shadeFront) {
+                shadeFront.addEventListener('change', function() {
+                    if (window.mta) {
+                        mta.triggerEvent('nmt:inputChanged', 'shadeFront', this.selectedIndex);
+                    }
+                });
+            }
             
-            document.getElementById('shadeBack').addEventListener('change', function() {
-                if (window.mta) {
-                    mta.triggerEvent('nmt:inputChanged', 'shadeBack', this.selectedIndex);
-                }
-            });
+            const shadeBack = document.getElementById('shadeBack');
+            if (shadeBack) {
+                shadeBack.addEventListener('change', function() {
+                    if (window.mta) {
+                        mta.triggerEvent('nmt:inputChanged', 'shadeBack', this.selectedIndex);
+                    }
+                });
+            }
             
             // Radio buttons
             ['shadeLighter', 'shadeDarker'].forEach(id => {
-                document.getElementById(id).addEventListener('change', function() {
-                    if (this.checked && window.mta) {
-                        mta.triggerEvent('nmt:inputChanged', 'shadeType', id === 'shadeDarker' ? 'darker' : 'lighter');
-                    }
-                });
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('change', function() {
+                        if (this.checked && window.mta) {
+                            mta.triggerEvent('nmt:inputChanged', 'shadeType', id === 'shadeDarker' ? 'darker' : 'lighter');
+                        }
+                    });
+                }
             });
             
             ['selectKey', 'toggleGuiKey'].forEach(id => {
-                document.getElementById(id).addEventListener('input', function() {
-                    if (window.mta) {
-                        mta.triggerEvent('nmt:inputChanged', id, this.value);
-                    }
-                });
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', function() {
+                        if (window.mta) {
+                            mta.triggerEvent('nmt:inputChanged', id, this.value);
+                        }
+                    });
+                }
             });
             
             ['selectionPerObject', 'selectionToggle'].forEach(id => {
-                document.getElementById(id).addEventListener('change', function() {
-                    if (this.checked && window.mta) {
-                        mta.triggerEvent('nmt:inputChanged', 'selectionMode', id === 'selectionToggle' ? 'toggle' : 'per-object');
-                    }
-                });
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('change', function() {
+                        if (this.checked && window.mta) {
+                            mta.triggerEvent('nmt:inputChanged', 'selectionMode', id === 'selectionToggle' ? 'toggle' : 'per-object');
+                        }
+                    });
+                }
             });
             
             // Button handlers
-            document.getElementById('applyTransform').addEventListener('click', () => window.mta && mta.triggerEvent('nmt:applyTransform'));
-            document.getElementById('applyProperties').addEventListener('click', () => window.mta && mta.triggerEvent('nmt:applyProperties'));
-            document.getElementById('clone').addEventListener('click', () => window.mta && mta.triggerEvent('nmt:clone'));
-            document.getElementById('generate').addEventListener('click', () => window.mta && mta.triggerEvent('nmt:generate'));
+            const btnApplyTransform = document.getElementById('applyTransform');
+            if (btnApplyTransform) btnApplyTransform.addEventListener('click', () => window.mta && mta.triggerEvent('nmt:applyTransform'));
+            
+            const btnApplyProperties = document.getElementById('applyProperties');
+            if (btnApplyProperties) btnApplyProperties.addEventListener('click', () => window.mta && mta.triggerEvent('nmt:applyProperties'));
+            
+            const btnClone = document.getElementById('clone');
+            if (btnClone) btnClone.addEventListener('click', () => window.mta && mta.triggerEvent('nmt:clone'));
+            
+            const btnGenerate = document.getElementById('generate');
+            if (btnGenerate) btnGenerate.addEventListener('click', () => window.mta && mta.triggerEvent('nmt:generate'));
         }
         
         function resetInput() {

@@ -13,6 +13,7 @@ function NMT.setMirrorMainElement(element)
         NMT.mirrorMainElement = nil
         guiSetText(NMT.gui.labelMirrorPlusMainElement, "Main element: not selected")
         guiSetText(NMT.gui.buttonSelectMirrorPlusMainElement, "Select Main Element")
+        NMT.processingMirrorMainElementSelect = false
 
         return true
     end
@@ -35,6 +36,9 @@ function NMT.setMirrorMainElement(element)
     NMT.applySelectedShaderToElement(element, "primary")
     guiSetText(NMT.gui.labelMirrorPlusMainElement, string.format("Main element: %s", getElementID(element)))
     guiSetText(NMT.gui.buttonSelectMirrorPlusMainElement, "Reset main element")
+    NMT.processingMirrorMainElementSelect = false
+    
+    exports.editor_gui:outputMessage("Main element selected", 0, 255, 0, 3000)
 
     return true
 end
@@ -190,18 +194,15 @@ function NMT.previewMirrorPlus()
     NMT.clearMirrorPreview()
     
     if not NMT.mirrorMainElement or not isElement(NMT.mirrorMainElement) then
-        outputChatBox("NMT: Please select a main element first", 255, 0, 0)
         return
     end
     
     if not NMT.selectedElements or NMT.countSelectedElements() == 0 then
-        outputChatBox("NMT: Please select elements to mirror using Q key", 255, 0, 0)
         return
     end
     
     local axes = NMT.getMirrorPlusAxes()
     if #axes.position == 0 and #axes.rotation == 0 then
-        outputChatBox("NMT: Please select at least one position or rotation axis", 255, 0, 0)
         return
     end
     
@@ -227,25 +228,20 @@ function NMT.previewMirrorPlus()
             end
         end
     end
-    
-    outputChatBox(string.format("NMT: Previewing %d mirrored elements", #mirrorPreviewElements), 0, 255, 0)
 end
 
 -- Generate Mirror+ (new function for checkbox-based system)
 function NMT.generateMirrorPlus()
     if not NMT.mirrorMainElement or not isElement(NMT.mirrorMainElement) then
-        outputChatBox("NMT: Please select a main element first", 255, 0, 0)
         return
     end
     
     if not NMT.selectedElements or NMT.countSelectedElements() == 0 then
-        outputChatBox("NMT: Please select elements to mirror using Q key", 255, 0, 0)
         return
     end
     
     local axes = NMT.getMirrorPlusAxes()
     if #axes.position == 0 and #axes.rotation == 0 then
-        outputChatBox("NMT: Please select at least one position or rotation axis", 255, 0, 0)
         return
     end
     
@@ -285,7 +281,6 @@ addEvent("nmt:mirrorGenerated", true)
 addEventHandler("nmt:mirrorGenerated", root, function(elements)
     local index = #mirrorElementList + 1
     mirrorElementList[index] = elements
-    outputChatBox(string.format("NMT: Generated %d mirrored elements", #elements), 0, 255, 0)
 end)
 
 -- Export for use in other modules

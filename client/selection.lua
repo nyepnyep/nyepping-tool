@@ -120,17 +120,12 @@ end)
 
 -- Key handler for selection
 function NMT.selectKeyHandler()
-    -- Debug output
-    outputDebugString("NMT: selectKeyHandler called. Mode: " .. tostring(NMT.settings.selectionMode))
-    
     -- Toggle mode: pressing the key toggles selection mode on/off
     if NMT.settings.selectionMode == "toggle" then
         toggleModeActive = not toggleModeActive
         if toggleModeActive then
-            outputChatBox("NMT: Selection mode active - click elements to select, press " .. NMT.settings.keyBindSelect .. " again to finish", 0, 255, 0)
             exports.editor_gui:outputMessage("Selection mode: ON (click elements)", 0, 255, 0, 5000)
         else
-            outputChatBox("NMT: Selection mode disabled", 255, 255, 0)
             exports.editor_gui:outputMessage("Selection mode: OFF", 255, 255, 0, 3000)
         end
         return
@@ -144,11 +139,6 @@ function NMT.selectKeyHandler()
 
     NMT.selectElement(editorSelectedElement)
 end
-
--- Bind selection key on resource start
-addEventHandler("onClientResourceStart", getResourceRootElement(getThisResource()), function()
-    bindKey(NMT.settings.keyBindSelect, "down", NMT.selectKeyHandler)
-end)
 
 -- Reset toggle mode when settings change
 addEvent("nmt:resetToggleMode", true)

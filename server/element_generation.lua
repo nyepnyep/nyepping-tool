@@ -25,7 +25,6 @@ addEventHandler("nmt:generateElements", root, function(data, baseElement)
     outputChatBox("NMT: Generated " .. #data .. " element" .. (#data == 1 and "" or "s"), source, 0, 255, 0)
 end)
 
--- From MZT: Clone selected elements
 addEvent("nmt:cloneElements", true)
 addEventHandler("nmt:cloneElements", root, function(data)
     if type(data) ~= "table" then
@@ -39,6 +38,4 @@ addEventHandler("nmt:cloneElements", root, function(data)
             setElementID(newElement, newID)
         end
     end
-
-    outputChatBox("NMT: Cloned " .. #data .. " element" .. (#data == 1 and "" or "s"), source, 0, 255, 0)
 end)

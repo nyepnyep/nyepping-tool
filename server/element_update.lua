@@ -22,6 +22,4 @@ addEventHandler("nmt:updateElements", root, function(data, model, scale, collisi
             exports.edf:edfSetElementRotation(v[1], v[5], v[6], v[7])
         end
     end
-
-    outputChatBox("NMT: Applied changes to " .. #data .. " element" .. (#data == 1 and "" or "s"), source, 0, 255, 0)
 end)

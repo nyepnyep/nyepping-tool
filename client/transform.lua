@@ -87,8 +87,6 @@ function NMT.resetGUIInput()
                 NMT.restoreElementRotation(element)
             end
         end
-        
-        outputChatBox("NMT: Restored elements to original position/rotation", 0, 255, 0)
     end
 end
 

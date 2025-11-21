@@ -26,7 +26,6 @@ addEventHandler("nmt:betweenGenerate", root, function(element1, element2, duplic
         elements[#elements + 1] = newElement
     end
     triggerClientEvent(source, "nmt:sendBetweenData", source, elements)
-    outputChatBox("NMT: Generated " .. #elements .. " element" .. (#elements == 1 and "" or "s") .. " between objects", source, 0, 255, 0)
 end)
 
 -- Generate elements between multiple pairs (outer edges only)
@@ -66,5 +65,4 @@ addEventHandler("nmt:betweenGenerateMultiple", root, function(pairs, duplication
     end
     
     triggerClientEvent(source, "nmt:sendBetweenData", source, allElements)
-    outputChatBox("NMT: Generated " .. #allElements .. " element" .. (#allElements == 1 and "" or "s") .. " on outer edges", source, 0, 255, 0)
 end)

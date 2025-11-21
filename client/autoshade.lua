@@ -4,7 +4,6 @@
 function NMT.applyAutoShade()
     -- Check if there are any selected elements
     if not NMT.selectedElements or NMT.countSelectedElements() == 0 then
-        outputChatBox("NMT: Please select one or more object elements using Q key", 255, 0, 0)
         return
     end
 
@@ -53,13 +52,10 @@ function NMT.applyAutoShade()
     if guiRadioButtonGetSelected(NMT.gui.radioShadeDarker) then
         elemid = 8558
     end
-
-    outputDebugString("[NMT] Applying AutoShade to selected elements")
     
     -- Apply AutoShade to all selected elements
     for element in pairs(NMT.selectedElements) do
         if isElement(element) and getElementType(element) == "object" then
-            outputDebugString("[NMT] Triggering server event for element: " .. tostring(element))
             triggerServerEvent("nmt:autoShade", resourceRoot, element, sides, elemid)
         end
     end

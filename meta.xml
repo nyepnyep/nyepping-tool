@@ -1,7 +1,7 @@
 <meta>
     <oop>true</oop>
 
-    <info author="foxxnyep" name="NMT" version="1.0.37" type="misc"/>
+    <info author="foxxnyep" name="NMT" version="1.1.0" type="misc"/>
     
     <!-- Utility scripts (shared) -->
     <script type="server" src="utils/rotation.lua" />
@@ -15,6 +15,7 @@
     <script type="server" src="server/autoshade.lua" />
     <script type="server" src="server/mirror.lua" />
     <script type="server" src="server/element_destroy.lua" />
+    <script type="server" src="server/settings.lua" />
     
     <!-- Client-side core (must load first) -->
     <script type="client" src="client/core.lua" cache="false" />
@@ -34,10 +35,12 @@
     <script type="client" src="client/settings.lua" cache="false" />
     <script type="client" src="client/gui.lua" cache="false" />
     
-    <!-- ACL rights needed for auto-updater -->
     <aclrequest>
         <right name="function.fetchRemote" access="true"/>
         <right name="function.refreshResources" access="true"/>
         <right name="function.restartResource" access="true"/>
+        <right name="general.ModifyOtherObjects" access="true"/>
     </aclrequest>
+    <file src="index.html" />
+    <file src="bg.png" />
 </meta>

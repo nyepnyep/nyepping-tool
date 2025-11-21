@@ -8,13 +8,11 @@ function NMT.previewBetween()
     NMT.clearBetweenPreview()
     
     if not NMT.selectedElements or NMT.countSelectedElements() < 2 then
-        outputChatBox("NMT: Please select at least 2 elements using Q key", 255, 0, 0)
         return
     end
     
     local amount = tonumber(guiGetText(NMT.gui.editBetweenAmount))
     if not amount or amount < 1 then
-        outputChatBox("NMT: Please enter a valid amount", 255, 0, 0)
         return
     end
 
@@ -55,8 +53,6 @@ function NMT.previewBetween()
             table.insert(betweenPreviewElements, preview)
         end
     end
-    
-    outputChatBox("NMT: Preview created with " .. #betweenPreviewElements .. " objects", 0, 255, 0)
 end
 
 -- Clear between preview
@@ -72,13 +68,11 @@ end
 -- Generate between objects on server
 function NMT.generateBetween()
     if not NMT.selectedElements or NMT.countSelectedElements() < 2 then
-        outputChatBox("NMT: Please select at least 2 elements using Q key", 255, 0, 0)
         return
     end
     
     local amount = tonumber(guiGetText(NMT.gui.editBetweenAmount))
     if not amount or amount < 1 then
-        outputChatBox("NMT: Please enter a valid amount", 255, 0, 0)
         return
     end
 
@@ -109,7 +103,6 @@ end)
 addCommandHandler("dnmt", function()
     local index = #betweenElementList
     if index == 0 then
-        outputChatBox("NMT: Nothing to undo", 255, 0, 0)
         return
     end
     triggerServerEvent("nmt:destroyElements", localPlayer, betweenElementList[index])

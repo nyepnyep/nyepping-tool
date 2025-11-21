@@ -5,20 +5,14 @@ local autoShadeUndoHistory = {}
 
 addEvent("nmt:autoShade", true)
 addEventHandler("nmt:autoShade", root, function(element, sides, elemid)
-    -- Ensure we have a valid client
     if not client or not isElement(client) then
-        outputDebugString("[NMT Server] autoShade: invalid client")
         return
     end
 
-    outputDebugString("[NMT Server] autoShade event received from client: " .. tostring(client))
-
     if not element or not isElement(element) then
-        outputDebugString("[NMT Server] Invalid element")
         return
     end
     if type(sides) ~= "table" then
-        outputDebugString("[NMT Server] Invalid sides table")
         return
     end
 
@@ -161,17 +155,10 @@ addEventHandler("nmt:autoShade", root, function(element, sides, elemid)
         table.insert(createdElements, shade)
     end
 
-    -- Only record history and notify client if elements were actually created
+    -- Only record history if elements were actually created
     if #createdElements > 0 then
-        outputDebugString("[NMT Server] AutoShade created " .. #createdElements .. " elements for client " .. tostring(client))
-
         autoShadeUndoHistory[client] = autoShadeUndoHistory[client] or {}
         table.insert(autoShadeUndoHistory[client], createdElements)
-
-        outputChatBox("NMT: Created " .. createdCount .. " shade object" .. (createdCount == 1 and "" or "s"), client, 0, 255, 0)
-    else
-        outputDebugString("[NMT Server] No elements created")
-        outputChatBox("NMT: No shades created - please select at least one side", client, 255, 165, 0)
     end
 end)
 
@@ -185,7 +172,6 @@ addEventHandler("nmt:autoShadeUndo", root, function()
 
     local history = autoShadeUndoHistory[player]
     if not history or #history == 0 then
-        outputChatBox("NMT: Nothing to undo", player, 255, 0, 0)
         return
     end
 
@@ -193,11 +179,9 @@ addEventHandler("nmt:autoShadeUndo", root, function()
     table.remove(history, #history)
 
     if type(lastBatch) ~= "table" or #lastBatch == 0 then
-        outputChatBox("NMT: Nothing to undo", player, 255, 0, 0)
         return
     end
 
     -- element_destroy only expects a single table of elements
     triggerEvent("nmt:destroyElements", resourceRoot, lastBatch)
-    outputChatBox("NMT: Undone last AutoShade application", player, 0, 255, 0)
 end)
